@@ -18,15 +18,17 @@ This file tracks tasks for improving the project management system itself (Gemin
     - [ ] Verify `research/mcallister_reproduction/` contains all critical context from the old repo.
 
 ## Tooling & Infrastructure
-- [ ] **Semgrep Cost Controls**:
-    - [ ] Implement `scripts/index_allowlist.txt`.
-    - [ ] Update `scripts/build_index.py` to enforce the allowlist.
-    - [ ] Update `bin/semgrep-index` to default to `--dry-run` or require confirmation.
-    - [ ] Verify caching logic covers all API calls.
+- [x] **Semgrep Cost Controls**:
+    - [x] Implement `scripts/index_allowlist.txt`.
+    - [x] Update `scripts/build_index.py` to enforce the allowlist.
+    - [x] Update `bin/semgrep-index` to default to `--dry-run` or require confirmation.
+    - [x] Verify caching logic covers all API calls.
 - [x] **Search Indexing**:
     - [x] Run `bin/semgrep-index` to populate the initial index.
     - [x] Verify `bin/semgrep` works across submodules.
     - [x] Index all critical and useful research papers in `research/papers/`.
+- [x] **Security**:
+    - [x] Run `trufflehog` before initial push (Verified clean git history).
 - [x] Implement `pdftotext` conversion for missing DESI papers (where .tex is unavailable).
 - [x] Add more recent DESI papers (arXiv:2404.03002, etc.) as requested (Used LaTeX source).
 - [ ] **Submodules**:
