@@ -47,3 +47,4 @@ We link them via symlinks (`project/` in code repos points here), so you can ref
 - **No Shortcuts**: Do not use approximations without explicit justification.
 - **Formal Proof**: If a property is critical, verify it with Aeneas.
 - **Reproducibility**: Results must match published literature exactly.
+- **Source Integrity**: Prefer `.tex` sources for papers. PDF-to-text conversion is a last resort, as it can corrupt mathematical formulas.
