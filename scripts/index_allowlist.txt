@@ -51,3 +51,5 @@ research/papers/pdg_2025_cosmological_parameters.txt
 research/papers/rpp2024-rev-cosmological-parameters.txtresearch/papers/desi_swampland_quintessence_1808.02877.tex
 research/papers/quintessence_phantoms_desi_2025_2506.21542.tex
 research/papers/kmix_quintessence_2511.23463.tex
+research/exopriors_findings.md
+research/EXOPRIORS_PROMPT.txt
