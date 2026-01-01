@@ -23,7 +23,8 @@ This repository is **Ground Control** and the central knowledge hub for the Stri
 **CRITICAL**: My git discipline must be flawless. I have previously committed sensitive data (.env) and massive garbage files (.chroma). This must NEVER happen again.
 
 1.  **Always `git status`**: Run `git status` before EVERY commit. This is a non-negotiable preflight check.
-2.  **`git add .` Restriction**: `git add .` is allowed **ONLY** after running `git status` and verifying the list of affected files.
+2.  **Stop and Read**: After running `git status`, I must **STOP** and read the output in a separate step before proceeding to `git add`. Chaining `git status && git add` is **FORBIDDEN**.
+3.  **`git add .` Restriction**: `git add .` is allowed **ONLY** after reading the `git status` output and verifying the list of affected files.
 3.  **Mandatory `git diff`**: I must run `git diff` if I do not have absolute certainty about what changed in a file (e.g., after an interruption or automated edit).
 4.  **Strict Ignoring**: Ensure `.env`, `.ai_cache/`, `.chroma/`, `.venv/`, and `__pycache__/` are ALWAYS in `.gitignore`.
 5.  **Atomic Commits**: Commits should be logical units.
