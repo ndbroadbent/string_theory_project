@@ -1,0 +1,14 @@
+AGENTS.md
+README.md
+project_docs/ARCHITECTURE.md
+project_docs/FORMAL_VERIFICATION.md
+project_docs/FORMAL_VERIFICATION_STRATEGY.md
+project_docs/PROJECT_PHILOSOPHY.md
+project_docs/PYTHON_BRIDGE.md
+project_docs/FORMULAS.md
+todo/project/internal.md
+todo/cyrus/main.md
+todo/string_theory/main.md
+research/mcallister_reproduction/REPRODUCTION_OUTLINE.md
+research/mcallister_reproduction/KKLT_SOLVER_RESEARCH.md
+research/verification/MCALLISTER_REPRODUCTION.md

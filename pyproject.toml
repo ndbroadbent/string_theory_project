@@ -1,0 +1,12 @@
+[project]
+name = "string-theory-project"
+version = "0.1.0"
+description = "Central Knowledge Base and Tooling for String Theory Project"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb>=1.0",
+    "openai>=2.0",
+    "python-dotenv>=1.0",
+    "tiktoken>=0.5",
+]

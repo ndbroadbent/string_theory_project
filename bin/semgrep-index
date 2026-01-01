@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#
+# semgrep-index - Build semantic search index
+#
+# Wrapper script for build_index.py that works from anywhere.
+# Designed to be run from chat_to_map_saas repo.
+#
+# Usage:
+#   semgrep-index                    # Index all default directories
+#   semgrep-index --dry-run          # Estimate costs first
+#   semgrep-index src/               # Index specific directory
+#   semgrep-index --limit 100        # Test with limited chunks
+#
+
+set -e
+
+# Find the project root (where this script lives)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Run from current directory (typically saas repo), but use project's Python env
+exec uv run --project "$PROJECT_ROOT" python "$PROJECT_ROOT/scripts/build_index.py" "$@"

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# semgrep - Semantic search across project docs and code
+#
+# Wrapper script for semantic_search.py that works from anywhere.
+# Designed to be run from chat_to_map_saas repo.
+#
+# Usage:
+#   semgrep "search query"
+#   semgrep "query" --top 10
+#   semgrep "query" --type md          # Only markdown files
+#   semgrep "query" src/               # Only files in src/
+#   semgrep "query" project/ --type md # Markdown in project/
+#
+
+set -e
+
+# Find the project root (where this script lives)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Run from current directory (typically saas repo), but use project's Python env
+exec uv run --project "$PROJECT_ROOT" python "$PROJECT_ROOT/scripts/semantic_search.py" "$@"
