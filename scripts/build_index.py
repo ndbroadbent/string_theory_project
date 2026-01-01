@@ -41,6 +41,8 @@ INDEXABLE_EXTENSIONS = {
     # Documentation
     ".md": "markdown",
     ".sql": "sql",
+    ".tex": "latex",
+    ".txt": "text",
     # Code
     ".ts": "typescript",
     ".tsx": "typescript",

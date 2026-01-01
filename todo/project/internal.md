@@ -23,9 +23,12 @@ This file tracks tasks for improving the project management system itself (Gemin
     - [ ] Update `scripts/build_index.py` to enforce the allowlist.
     - [ ] Update `bin/semgrep-index` to default to `--dry-run` or require confirmation.
     - [ ] Verify caching logic covers all API calls.
-- [ ] **Search Indexing**:
-    - [ ] Run `bin/semgrep-index` to populate the initial index.
-    - [ ] Verify `bin/semgrep` works across submodules.
+- [x] **Search Indexing**:
+    - [x] Run `bin/semgrep-index` to populate the initial index.
+    - [x] Verify `bin/semgrep` works across submodules.
+    - [x] Index all critical and useful research papers in `research/papers/`.
+- [ ] Implement PDF support for indexing (or convert PDFs to text).
+- [ ] Add more recent DESI papers (arXiv:2404.03002, etc.) as requested.
 - [ ] **Submodules**:
     - [ ] Verify `git submodule update --remote` workflow works locally.
 

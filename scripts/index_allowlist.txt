@@ -12,3 +12,40 @@ todo/string_theory/main.md
 research/mcallister_reproduction/REPRODUCTION_OUTLINE.md
 research/mcallister_reproduction/KKLT_SOLVER_RESEARCH.md
 research/verification/MCALLISTER_REPRODUCTION.md
+
+# Critical Papers
+research/papers/small_cc_2107.09064.tex
+research/papers/cytools_paper_2211.03823.tex
+research/papers/systematic_kahler_stabilization_2005.11329.tex
+research/papers/demirtas_small_W0_1912.10047.tex
+research/papers/cohomcalg_algorithm_1003.5217.tex
+research/papers/inflation_to_quintessence_2407.03405.tex
+research/papers/quintessence_string_moduli_2112.10779.tex
+
+# Other Useful Papers
+research/papers/1712.04946_hodge_divisors.tex
+research/papers/all_flux_vacua_explicit_1212.4530.tex
+research/papers/cicy_flat_flux_2201.10581.tex
+research/papers/coexisting_flux_vacua_2507.00615.tex
+research/papers/complex_geometry_cy_toric_0702063.tex
+research/papers/conifold_vacua_2009.03312.tex
+research/papers/efficient_cy_algorithm_2309.10855.tex
+research/papers/ga_flux_vacua_1302.0529.tex
+research/papers/ga_flux_vacua_1907.10072.tex
+research/papers/gkz_short_guide_2412.14748.tex
+research/papers/heavy_tails_cy_moduli_1407.0709.tex
+research/papers/mcallister_moduli_space_reconstruction_2212.10573.tex
+research/papers/mcallister_moduli_stabilization_review_2310.20559.tex
+research/papers/orientifold_cy_divisor_involutions_2111.03078.tex
+research/papers/secondary_fan_cy_pairs_2008.02299.tex
+research/papers/special_geometry_N2_supergravity_van_proeyen_9611112.tex
+research/papers/special_kahler_manifolds_freed_9712042.tex
+research/papers/toric_geometry_intro_0901.3695.tex
+research/papers/toric_geometry_telen_2203.01690.tex
+research/papers/what_is_special_kahler_geometry_9703082.tex
+research/papers/witten_phases_n2_9301042.tex
+
+# Text Files
+research/papers/candelas_COGP_mirror_symmetry_1991.txt
+research/papers/pdg_2025_cosmological_parameters.txt
+research/papers/rpp2024-rev-cosmological-parameters.txt
