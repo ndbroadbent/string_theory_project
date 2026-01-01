@@ -8,7 +8,7 @@ This file tracks tasks for improving the project management system itself (Gemin
     - [x] Re-create `prds/CYRUS_VERIFICATION_PIPELINE.md`.
     - [x] Re-create `prds/PLAYGROUND.md`.
     - [x] Re-create `handoffs/20260101_cyrus_verification.md`.
-- [ ] **Audit & Categorize**:
+- [x] **Audit & Categorize**:
     - [ ] Complete inventory of `reference/cyrus` docs.
     - [ ] Complete inventory of `reference/string_theory_search` docs.
 - [ ] **Synthesis**:
