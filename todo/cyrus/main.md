@@ -121,29 +121,91 @@ Compute V₀ from polytope + fluxes only.
 
 Compute κ_ijk from polytope (currently loaded from CYTools).
 
-See `plan_intersection_computation.md` for algorithm details.
+See `plan_intersection_computation.md` and `project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md`.
 
-- [ ] Implement `Triangulation::distinct_intersections()`
-- [ ] Implement `Polytope::glsm_relations()`
-- [ ] Implement linear system builder
-- [ ] Integrate sparse solver
-- [ ] Implement CY hypersurface reduction
+### 5.1 GLSM Charge Matrix
+- [ ] Augment point matrix with row of 1s (CY condition)
+- [ ] Compute left null space (kernel) of augmented matrix
+- [ ] Use HNF/LLL for integral basis
+
+### 5.2 Distinct Intersections (from triangulation)
+- [ ] For each n-simplex in triangulation, compute 1/|det(vertices)|
+- [ ] Store as known intersection values for distinct indices
+
+### 5.3 Linear System Construction
+- [ ] Generate all (n-1)-tuples of divisors as "probes" P
+- [ ] For each GLSM relation Σ Q_i D_i = 0, create equation: Σ Q_i (D_i · P) = 0
+- [ ] Separate knowns (from step 5.2) from unknowns (self-intersections)
+
+### 5.4 Solve and Reduce
+- [ ] Solve overdetermined system (sparse least squares or exact rational)
+- [ ] Apply CY hypersurface reduction: κ_ijk^CY = -κ_0ijk^ambient
 
 ---
 
-## Phase 6: Full Independence from CYTools
+## Phase 6: Triangulation
 
-### 6.1 Triangulation
-- [ ] Implement FRST (fine, regular, star triangulation)
-- [ ] Or: integrate existing Rust triangulation library
+Compute triangulation from polytope + heights.
 
-### 6.2 GV Invariants
-- [ ] Port cygv algorithm to Rust
-- [ ] Or: implement mirror symmetry computation
+See `project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md` §4.
 
-### 6.3 Kähler Cone
-- [ ] Implement cone generators
+### 6.1 Height-Induced Triangulation
+- [ ] Lift points to (v_i, h_i) in R^{d+1}
+- [ ] Compute convex hull (use existing Rust crate: `convex_hull` or `delaunay`)
+- [ ] Extract lower faces (normal has negative last component)
+- [ ] Project back to R^d
+
+### 6.2 FRST Validation
+- [ ] Check Fine: all points are vertices of some simplex
+- [ ] Check Star: origin is vertex of every simplex
+- [ ] Check Regular: comes from height function (automatic if using heights)
+
+### 6.3 Random Triangulation Sampling
+- [ ] Generate random heights with origin at -∞ (ensures Star)
+- [ ] Validate FRST properties
+
+---
+
+## Phase 7: Kähler Cone
+
+See `project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md` §5.
+
+### 7.1 Secondary Cone (Wall Computation)
+- [ ] For each pair of adjacent simplices, compute wall normal
+- [ ] Collect all inequality constraints
+
+### 7.2 Mori Cone
+- [ ] Compute curve classes from divisor intersections
+- [ ] Find minimal generators
+
+### 7.3 Kähler Cone
+- [ ] Dualize Mori cone
 - [ ] Implement point-in-cone test
+
+---
+
+## Phase 8: GV Invariants (HKTY Procedure)
+
+This is the hardest part. See `project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md` §3.
+
+### 8.1 Mirror Map
+- [ ] Compute periods of mirror manifold near LCS point
+- [ ] This requires solving Picard-Fuchs equations
+- [ ] Define mirror coordinates t^a(z) = ϖ_a(z) / ϖ_0(z)
+
+### 8.2 Yukawa Couplings
+- [ ] Compute B-model Yukawa couplings (z-dependence)
+- [ ] Transform to t-coordinates via mirror map Jacobian
+
+### 8.3 GV Extraction
+- [ ] Expand Yukawa as power series in q = exp(2πit)
+- [ ] Subtract classical κ_abc
+- [ ] Solve for integer n_q using multicover formula
+
+**Note:** This is a significant undertaking. May want to:
+- Use precomputed GV invariants from fixtures initially
+- Implement simplified cases (1-parameter models) first
+- Consider numerical period computation as alternative
 
 ---
 

@@ -1,0 +1,678 @@
+\documentclass[
+ reprint,
+superscriptaddress,
+preprintnumbers,
+nofootinbib,
+ amsmath,amssymb,
+ aps,
+]{revtex4-1}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{bm}
+
+\usepackage{booktabs}
+
+\usepackage{slashed}
+
+\usepackage{float}
+
+\usepackage{xcolor}
+\usepackage{feynmp-auto}
+\definecolor{romared}{RGB}{142,0,28}
+\definecolor{tabblue}{RGB}{31, 119, 180}
+\definecolor{darkblue}{RGB}{0, 0, 120}
+\definecolor{tabred}{RGB}{214, 39, 40}
+\definecolor{tabgreen}{RGB}{44, 160, 44}
+\definecolor{tabgray}{RGB}{100, 100, 100}
+\definecolor{goldenrod}{RGB}{218, 165, 32}
+\definecolor{taborange}{RGB}{255, 127, 14}
+\definecolor{tabbrown}{RGB}{128, 0, 0}
+\definecolor{tabpink}{RGB}{255, 141, 161}
+\definecolor{tabpurple}{RGB}{148, 103, 189}
+
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{celticsgreen}{rgb}{0, 0.478, 0.2}
+\definecolor{celticsgold}{rgb}{0.58823529411, 0.21960784313, 0.1294117647}
+
+\newcommand{\mike}[1]{\textcolor{celticsgold}{MT: #1}}
+\newcommand{\misha}[1]{[\textcolor{blue}{MI: #1}]}
+
+\usepackage[colorlinks=true,citecolor=celticsgreen,linkcolor=celticsgreen,urlcolor=celticsgreen,backref=false,pdfborder={0 0 0}]{hyperref}
+
+
+\begin{document}
+
+\preprint{MIT-CTP/5963}
+
+\title{Kinetic Mixing and the Phantom Illusion:\\ Axion–Dilaton Quintessence in Light of DESI DR2}
+
+
+\author{Michael W. Toomey}
+\email{mtoomey@mit.edu}
+\affiliation{Center for Theoretical Physics -- a Leinweber Institute, Massachusetts Institute of Technology, Cambridge, MA 02139, USA}
+
+
+\author{Ellie Hughes}
+\affiliation{Center for Theoretical Physics -- a Leinweber Institute, Massachusetts Institute of Technology, Cambridge, MA 02139, USA}
+
+
+\author{Mikhail M. Ivanov }
+\email{ivanov99@mit.edu}
+\affiliation{Center for Theoretical Physics -- a Leinweber Institute, Massachusetts Institute of Technology, Cambridge, MA 02139, USA}
+ \affiliation{The NSF AI Institute for Artificial Intelligence and Fundamental Interactions, Cambridge, MA 02139, USA}
+
+\author{James M. Sullivan}
+\thanks{Brinson Prize Fellow}
+\affiliation{Center for Theoretical Physics -- a Leinweber Institute, Massachusetts Institute of Technology, Cambridge, MA 02139, USA}
+
+
+
+\date{\today}
+
+
+\begin{abstract}
+    Recent results from DESI BAO analyses suggest that dark energy may not be a cosmological constant and is in fact dynamical. Furthermore, the data suggest that the equation of state may have been in the phantom regime in the distant past, recently undergoing a phantom crossing. In this work, we investigate whether this preference can be realized within a kinetically mixed axion–dilaton (KMIX) quintessence model, a string-motivated system in which an axion-like field couples exponentially to a dilaton-like (moduli) field. Crucially, KMIX can \emph{appear} phantom in a standard Chevallier–Polarski–Linder (CPL) based analysis while the underlying theory remains non-phantom and stable at all times. To confront the model with data, we develop a fast pipeline based on normalizing flows that (i) learns a theory-informed prior on $(w_0,w_a)$ from KMIX realizations and (ii) provides an inverse mapping from CPL parameters back to the physical KMIX parameters. By importance-sampling pre-computed CPL chains using this framework, we effectively transform generic phenomenological constraints into direct, computationally efficient constraints on the underlying KMIX theory, avoiding the prohibitive cost of full parameter space exploration. We propose that this framework offers a powerful computational shortcut for efficiently constraining a broad swath of theoretical models, transforming generic phenomenological fits into high-fidelity theory-level constraints with negligible computational overhead. Applied to \textit{Planck}+DESI DR2 BAO measurements, our framework finds support for KMIX at $2.5\sigma$ compared to the base CPL fit at $3.1\sigma$, demonstrating that KMIX may account for the DESI preference \emph{without} invoking true phantom behavior. When additionally including Type Ia supernovae data, we find that the preference remains above $3\sigma$ for Union3 and DES~Y5, but drops to $2.1\sigma$ with Pantheon+. The latter, combined with the DESI full-shape power spectrum and bispectrum data, further reduces the preference to $1.7\sigma$. Ultimately, should the DESI deviation persist with future data, KMIX may offer a theoretically well-motivated explanation for the phantom-like signatures inferred from phenomenological fits.
+\end{abstract}
+
+
+\maketitle
+
+
+\section{Introduction \label{sec:intro}}
+
+Recent results from the Dark Energy Spectroscopic Instrument (DESI) \cite{DESI:2024mwx,DESI:2025zgx} have renewed interest in the possibility that cosmic acceleration may not be driven by a cosmological constant, but by a dynamical dark energy (DE) component. In particular, analyses combining DESI DR2 baryon acoustic oscillation (BAO) data with cosmic microwave background (CMB) measurements have reported a preference for an evolving equation of state in the standard Chevallier--Polarski--Linder (CPL) parameterization \cite{Chevallier:2000qy,Linder:2002et},
+\begin{equation}
+    w(a) = w_0 + w_a (1-a),
+\end{equation}
+with a significance $\sim 3\sigma$ \cite{DESI:2025zgx}. Moreover, the inferred time evolution suggests a so-called ``phantom crossing,'' in which the effective equation of state transitions from $w<-1$ at early times to $w>-1$ today \cite{DESI:2025fii}. 
+While there is an ongoing debate in the literature
+about the significance
+of DESI's results,
+especially in the context 
+of alternative 
+DE parameterizations (see e.g.~\cite{Chen:2024vuf,DESI:2024kob,Luongo:2024fww,Shajib:2025tpd,Jiang:2024xnu,Shlivko:2025fgv,Efstathiou:2025tie,Wang:2025vfb, Cheng:2025lod,Wang:2025vfb,Chudaykin:2025aux,deSouza:2025vdv,Toomey:2025xyo,Ong:2025utx}),
+the phantom crossing appears
+to be substantially preferred
+by the data regardless
+of adopted parameterizations
+and analysis modes~\cite{DESI:2024kob,DESI:2025fii}.
+
+
+The apparent phantom behavior poses well-known theoretical difficulties. Models that persist in the phantom regime can violate the Null Energy Condition, leading to the possibility for 
+ghost instabilities 
+\cite{Caldwell:1999ew,Hu:2004kh}.\footnote{See \cite{Caldwell:2025inn} for a recent discussion on the subtleties associated with violation of the Null Energy Condition.} A growing class of explanations which avoid these peculiarities instead posit that the apparent phantom crossing 
+is simply 
+an artifact of the dark energy 
+parameterization
+used by DESI.
+In particular, it may be avoided in 
+non-minimal extensions
+of the standard dark matter and/or dark energy sectors.
+In these scenarios, interactions between multiple fields, couplings to dark matter, or nontrivial kinetic structures can generate an \emph{effective} phantom signature without introducing ghost-like instabilities \cite{Das:2005yj,Carroll:2004hc,Khoury:2025txd,Huey:2004qv,Brax:2023qyp,Smith:2024ibv,Bedroya:2025fwh,Silva:2025hxw,Wolf:2024eph,Wolf:2024stt,Wolf:2025jed,Goldstein:2025epp,Bottaro:2024pcb,Burgess:2025vxs}. This can be understood in the context of standard analyses for evolving dark energy in the CPL representation where the dark matter content is completely pressureless by construction at all times. 
+
+The limitations of the CPL parameterization in capturing these effects have motivated a return to more physically grounded models of dark energy, in particular those based on scalar-field dynamics. Within the class of \textit{quintessence} models \cite{Peebles:1987ek,Ratra:1987rm}, the dark energy component arises from the slow roll of a scalar field $\phi$ evolving under a potential $V(\phi)$. At the background level, its equation of state is given by
+\begin{equation}
+    w_\phi = \frac{\phi'^2 - 2a^2 V_\phi}{\phi'^2 + 2a^2 V_\phi},
+\end{equation}
+which is restricted to $-1\le w_\phi \le 1$ for canonical kinetic terms, precluding genuine phantom behavior. This restriction naturally extends to multi-field systems that are minimally coupled and lack interactions in the kinetic sector.  
+
+If one hopes to evade this bound, one must go beyond canonically normalized scalar fields for quintessence. Several promising frameworks have emerged in which kinetic or potential couplings between scalar fields can mimic phantom-like evolution while preserving theoretical consistency \cite{Smith:2024ibv}. Notably, coupling dark energy to dark matter can modify the effective equation of state through an evolving mass of the dark matter species, allowing $w_{\rm eff} < -1$ even when each field remains well behaved individually. A related and particularly motivated construction arises from the \emph{axion–dilaton} sector of string theory, where moduli and axion fields possess an exponential kinetic coupling inherited from the K\"ahler potential \cite{Bernardo:2022ztc,Alexander:2022own}. This structure naturally yields a kinetically mixed two-field system whose effective dynamics can exhibit apparent phantom behavior \cite{Smith:2024ibv,Toomey:2025mvx}. 
+
+In this work, we investigate this possibility using the \textit{Kinetically Mixed Axion–Dilaton Quintessence} (KMIX) model. This two-field system, in which an axion-like field with a periodic potential interacts with a dilaton-like field via an exponential kinetic coupling, provides a minimal, theoretically motivated mechanism for generating effective phantom signatures. To confront the model with data, we employ a fast inference pipeline based on normalizing flows (NFs)~\cite{Toomey:2024ita}, building on recent applications of simulation-based priors~\cite{Ivanov:2024hgq,Ivanov:2024xgb,Ivanov:2024dgv,Chen:2025jnr}. By learning the bidirectional mapping between the fundamental KMIX parameters and their effective CPL representation, the NF allows us to (i) construct \textit{theory-informed priors} on $(w_0, w_a)$ to efficiently reweight standard phenomenological chains, and (ii) subsequently invert the mapping to derive constraints on the underlying theory space. This strategy facilitates a rigorous comparison between phenomenological fits and physical multi-field scenarios, achieving a dramatic acceleration in inference speed relative to direct sampling of the full model space.
+
+We note that our
+NF-based approach to 
+theory-informed
+importance sampling 
+can be applied in a more general context 
+to any model whose behavior can be reduced 
+to non-linear priors
+on the phenomenological
+parameters such as energy density or the equation of state coefficients (in this work $w_0$ and $w_a$). This will allow one to easily obtain posteriors
+on the model parameters
+from the pre-computed
+Markov chain Monte Carlo (MCMC) chains, which greatly speeds up 
+the analysis of 
+physical dark sector
+models that can require significantly more computational resources (see, for example, \cite{Toomey:2024ita}). 
+
+
+This paper is organized as follows. In Sec.~\ref{sec:theory}, we introduce the KMIX framework, outlining the string-inspired axion–dilaton dynamics that allow it to generate apparent phantom signatures. Sec.~\ref{sec:priors} presents our end-to-end inference pipeline, detailing both the construction of theory-informed priors on $(w_0, w_a)$ and the inverse mapping used to project observational constraints back into the underlying parameter space. In Sec.~\ref{sec:analysis}, we describe the datasets and statistical methodology used to constrain the model with data, followed by the resulting constraints on the KMIX scenario in Sec.~\ref{sec:results}. Finally, we conclude in Sec.~\ref{sec:conclusion} with a summary of our findings and their broader implications for dark energy model building.
+
+
+\section{Kinetically Mixed \\Axion–Dilaton System}
+\label{sec:theory}
+
+The kinetic coupling between axion- and dilaton-like (moduli) fields arises naturally in string theory compactifications, where moduli and axions share a common K\"ahler potential that governs their field-space metric. In both heterotic and type~II theories, this structure generically leads to exponential factors in the kinetic term of the axion, reflecting its coupling to moduli fields \cite{Bernardo:2022ztc}. After dimensional reduction, one finds a non-canonical field-space metric of the schematic form
+\begin{equation}
+    \mathcal{L}_{\rm kin} \supset (\partial \chi)^2 + e^{2\chi}(\partial \phi)^2,
+    \label{Kahler-structure}
+\end{equation}
+where $\chi$ and $\phi$ denote the moduli and axion fields, respectively. This exponential dependence---a robust consequence of string compactification and moduli stabilization---implies that kinetic mixing between light scalar fields is a generic feature of the low-energy effective theory \cite{Cicoli:2012sz,Arvanitaki:2009fg,Alexander:2022own,Burgess:2021obw,Smith:2024ibv,Toomey:2025mvx}. For further discussion of the theoretical origin of such couplings, we refer the reader to \cite{Alexander:2022own}.
+
+The phenomenology of such models has recently been explored across several contexts—from addressing the Hubble and large-scale-structure tensions \cite{Alexander:2022own}, to describing ultralight condensate dark matter \cite{Toomey:2025mvx}, and even as a warm inflation mechanism \cite{Berera:2025jbj}. A central feature common to all is the possibility of transferring energy density between the axion and dilaton sectors through the kinetic coupling. In a setting where KMIX plays the role of a two-field quintessence-like model, this transfer can produce an \emph{apparent} phantom equation of state for the moduli field $\chi$ where the effective energy density increases with time. This makes the kinetically mixed axio–dilaton framework a particularly well-suited for explaining the apparent phantom behavior suggested by DESI. 
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{examp_KMIX_behavior.pdf}
+    \caption{ 
+    Example background dynamics for the KMIX model with $\lambda=-1.25$, $\alpha=1.7$, $\log_{10}\chi_i=-4$, $\log_{10}m = -31.8$, $\log_{10}f_\phi = 26.3$, and $\theta_i=3.12$. {\it Top panel:}  Field evolution in units of the reduced Planck mass, with $\phi$ (\textcolor{tabred}{red}) and $\chi$ (\textcolor{tabblue}{blue}) shown relative to the black dashed line marking $\phi, \chi = 0$. Both fields remain frozen at early times and become dynamical once $H \sim m_\phi$. {\it Middle panel:} Evolution of the fractional density for KMIX scalars $\chi$ (\textcolor{tabblue}{blue}) and $\phi$ (\textcolor{tabred}{red}) as well as for all of matter (including the scalar contribution) (solid \textcolor{tabpurple}{purple}). Additionally, we show the evolution of the early-Universe evolved dark matter density (dashed \textcolor{tabpurple}{purple}) which makes clear the impact this model has on the inferred dark matter density at late times.
+    {\it Bottom panel:} Evolution of the equation of state for the $\phi$ (\textcolor{tabred}{red}) and $\chi$ (\textcolor{tabblue}{blue}), together with the effective dark-energy equation of state $w_{\chi,{\rm eff}}$ (\textcolor{tabgreen}{green}), as defined in Eq.~\eqref{chi_eff}. The horizontal black dashed lines mark $w=-1$ and $w=1$. For $f(\chi)=e^{\lambda\chi}<1$, consistent with the choice of $\lambda$ used here, the kinetic coupling transfers energy from the axion ($\phi$) to the dilaton ($\chi$), effectively increasing $\rho_\chi$ over time. This energy flow produces an {\it apparent} phantom phase (seen here starting at $z\approx0.5$ where $w_{\chi,{\rm eff}}<-1$) even though the total system satisfies the Null Energy Condition as evidenced from the combined equation of state for $\phi + \chi$ (\textcolor{taborange}{orange}). 
+    }
+\label{fig:equation-of-state}
+\end{figure*}
+
+In this work we specifically have adopted a simplified four-dimensional effective theory inspired by the general structure of Eq.~\eqref{Kahler-structure},
+\begin{equation}
+    S = \int d^4x\,\sqrt{-g}\,\Big[-\frac{1}{2}(\partial_\mu \chi)^2 - \frac{1}{2}f(\chi)(\partial_\mu \phi)^2 - V(\chi,\phi)\Big],
+    \label{eq:action}
+\end{equation}
+where $\chi$ is a dilaton-like quintessence field and $\phi$ is an axion-like field. The function $f(\chi)=e^{\lambda\chi}$ encodes the exponential kinetic coupling between them, while the potential separates as
+\begin{equation}
+    V(\chi,\phi)=V_0 e^{-\alpha \chi} + m^2 f_\phi^2 \big[1-\cos(\phi/f_\phi)\big],
+\end{equation}
+with $(m,f_\phi)$ the axion mass and decay constant, $V_0$ the scale of the $\chi$ potential, and $\alpha$ setting the steepness of the moduli field's potential. This construction adopts the standard potentials for these fields: a periodic cosine for the axion $\phi$, dictated by its discrete shift symmetry, and an exponential for the dilaton $\chi$, characteristic of moduli fields in string effective theories. 
+
+
+This construction captures the essential dynamics of the kinetically mixed axion–dilaton system. The kinetic coupling facilitates energy exchange between the two fields, generating complex late-time evolution—specifically the apparent phantom behavior preferred by DESI—even from simple constituent potentials.\footnote{We emphasize that $\chi$ remains minimally coupled to gravity, ensuring the model naturally evades fifth-force constraints.} We can see this more clearly from the resulting equations of motion which are modified from the standard Klein-Gordon evolution,
+\begin{subequations}
+\begin{align}
+    \ddot{\phi} + \left(3H + \frac{f_\chi}{f} \dot{\chi}\right)\dot{\phi} + \frac{1}{f} V_\phi &= 0, \label{phi_eom}\\
+    \ddot{\chi} + 3 H \dot{\chi} - \frac{1}{2}f_\chi \dot{\phi}^2 + V_\chi &= 0.
+    \label{chi_eom}
+\end{align}
+\end{subequations}
+Inspecting these relations, we see that the axion's equation of motion acquires an effective friction term proportional to $\lambda \dot\chi$, along with a modulation of its potential by $1/f$. Conversely, the dilaton equation of motion includes a source or sink term (dependent on the sign of $\lambda$) driven by the kinetic energy of the axion, $\frac{1}{2}\lambda f \dot\phi^2$. Beyond the background dynamics, KMIX also modifies the evolution of linear perturbations. For a detailed treatment, we refer the reader to Ref.~\cite{Alexander:2019rsc}.
+
+Its also instructive to write down the modification to the energy densities and pressures in this model for both fields. For $\chi$ they are,
+\begin{equation}
+        \rho_\chi = \frac{1}{2}\dot\chi^2 + V(\chi),
+\end{equation}
+\begin{equation}
+        p_\chi = \frac{1}{2}\dot\chi^2 - V(\chi),
+\end{equation}
+and for $\phi$,
+\begin{equation}
+        \rho_\phi = \frac{1}{2}f\dot\phi^2 + V(\phi),
+\end{equation}
+\begin{equation}
+        p_\phi = \frac{1}{2}f \dot\phi^2 - V(\phi).
+\end{equation}
+It is easy to show from here that this model will not violate the NEC, that is, $-1\leq w_{\phi + \chi} \equiv p_{\phi + \chi} /\rho_{\phi + \chi}  \leq 1$. However, if we assume
+dark matter to be purely pressureless ($w=0$), 
+which is done in most DESI-based analyses, 
+one can have an apparent phantom equation of state in the KMIX model. By absorbing the kinetic coupling terms into the dynamics of the $\chi$ field, we define an effective equation of state for the dark energy sector:
+\begin{equation}\label{chi_eff}
+    w_{\chi,\rm eff} = \frac{\dot\chi^2 - 2V(\chi) + (f(\chi) - 1)\dot\phi^2}{\dot\chi^2 + 2V(\chi) + (f(\chi) - 1)\dot\phi^2}.
+\end{equation}
+Inspection of Eq.~\eqref{chi_eff} reveals the mechanism for phantom mimicry: whenever the coupling function satisfies $f(\chi) < 1$, the kinetic contribution in the numerator is suppressed relative to the denominator, making the phantom regime $w_{\chi,\rm eff} < -1$ dynamically accessible.
+
+
+
+
+We illustrate this behavior in Fig.~\ref{fig:equation-of-state} for a benchmark model selected to resemble the best-fit DESI expansion history. Here, the effective phantom crossing is triggered as the axion exits the slow-roll regime and is released from Hubble friction; consequently, we anticipate that reproducing this feature requires an axion mass $m \gtrsim H_0 \sim 10^{-33}$~eV. Crucially, the figure also confirms that the total system satisfies the Null Energy Condition at all times: the combined equation of state evolves from $w_{\rm total} \approx -1$ during the initial slow-roll phase toward larger (but still negative) values today, demonstrating that the phantom signature is strictly an effective phenomenon arising from the two-field interaction.
+
+\section{Generating Efficient constraints on the KMIX Model} \label{sec:priors}
+
+In this section, we outline the technical framework used to obtain efficient constraints on the KMIX model. Our approach employs a two-stage importance--sampling pipeline that transforms the existing CPL-based MCMC chains into samples consistent with the KMIX theory space. First, we impose KMIX-informed priors on the cosmological parameters using a conditional normalizing flow trained on theory-space data. Second, we use a separate normalizing flow to learn the non-linear mapping between the CPL $(w_0, w_a)$ representation and the underlying KMIX parameter space. Our NFs, a class of generative machine-learning models that learn bijective transformations between complex target distributions and simple base distributions \cite{2019arXiv191202762P}, allow us to reweight the CPL chains into high-fidelity KMIX chains without requiring a full MCMC run for the KMIX model.
+
+
+\subsection{Theory-Informed Priors for KMIX}
+\label{sec:kmix_priors_text}
+
+\begin{table}[!t]
+\centering
+\caption{Prior ranges adopted for the KMIX model parameters and used to generate effective prior on ($w_0,w_a$) -- see Fig.~\ref{fig:placeholder}.}
+\label{tab:kmix_priors}
+\begin{tabular}{lc}
+\hline\hline
+\textbf{Parameter} & \textbf{Prior Range} \\
+\hline
+$\lambda$                & $\mathcal{U}(-3,\,0)$ \\
+$\log_{10}(\chi_i)$      & $\mathcal{U}(-6,\,1)$ \\
+$\alpha$                 & $\mathcal{U}(0,\,10)$ \\
+$\theta_i$               & $\mathcal{U}(0,\,\pi)$ \\
+$\log_{10}(f_\phi/{\rm eV})$ & $\mathcal{U}(25,\,28)$ \\
+$\log_{10}(m/{\rm eV})$  & $\mathcal{U}(-33,\,-30)$ \\
+$H_0~[{\rm km\,s^{-1}\,Mpc^{-1}}]$ & $\mathcal{U}(50,\,90)$ \\
+$\omega_{\rm b}$          & $\mathcal{U}(0.0210,\,0.0245)$ \\
+$\omega_{\rm cdm}$        & $\mathcal{U}(0.100,\,0.140)$ \\
+\hline\hline
+\end{tabular}
+\end{table}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=0.9\linewidth]{fig_priors_prelim.pdf}
+    \caption{Theory-informed prior distributions for the KMIX model, derived through normalizing flow (NF) training using samples from the parameter ranges listed in Table~\ref{tab:kmix_priors}. {\it Left panel:} Raw training samples drawn from broad flat priors on the KMIX theory parameters, shown here for representative quantities $\chi_i$, and $\lambda$, demonstrating full coverage of the prior volume. {\it Right panel:} Triangle plot of the corresponding mapped $(w_0, w_a)$ distributions obtained through the CPL-matching procedure. Light red points show the raw training data, while increasingly darker contours indicate the 99\%, 95\%, and 68\% confidence regions of the resulting NF prior. Black curves denote the NF-learned priors: dashed lines for the 1D marginalized distributions and solid contours for the 2D joint distribution.}
+    \label{fig:placeholder}
+\end{figure*}
+
+
+Since our base chains were sampled under uniform priors on ($w_0,w_a$), the CPL posterior does not directly reflect the probability density implied by the KMIX model. However, by reweighting these chains using a KMIX-induced prior in $(w_0, w_a)$ one can alternatively provide a computationally efficient surrogate for the posterior that would be obtained from a full MCMC performed directly in KMIX theory space. In this sense, importance resampling the CPL chains with a KMIX prior for ($w_0,w_a$) functions as the theoretical lens through which one can interpret the viability of KMIX. There are of course limitations to this approach, but the trade off is efficient generation of constraints without a need for computationally expensive MCMC runs, which can become intractable for models with detailed UV physics (see discussions in \cite{Toomey:2024ita} in the context of early dark energy).
+
+
+To generate the KMIX informed prior on ($w_0,w_a$) we follow the methods developed in \cite{Toomey:2024ita,Toomey:2025xyo} to generate theory informed priors on phenomenological parameters with NFs. On the theory side, our prior choices for the KMIX model ($\lambda$, $f_\phi$, etc.) are guided by string-theoretic consistency and landscape statistics while remaining deliberately broad to capture all phenomenologically viable regions. On the axion side, quantum-gravity arguments against exact global symmetries~\cite{Kallosh:1995hi,Banks:2003sx}, the axion weak gravity conjecture (WGC)~\cite{Arkani-Hamed:2006emk,Rudelius:2015xta,Brown:2015iha,Hebecker:2015zss}, and explicit compactifications~\cite{Svrcek:2006yi,Conlon:2006tq,Cicoli:2012sz} bound the decay constant to be sub-Planckian and imply an instanton expansion with action $S \sim c M_{\rm pl}/f_\phi$ and $c=\mathcal{O}(1)$, leading to the familiar harmonic structure in $V(\theta)$. Convergence and dominance of the leading mode require $M_{\rm pl}^4 e^{-c M_{\rm pl}/f_\phi}\ll m^2 f_\phi^2$, equivalent to $f_\phi \log\!\left(M_{\rm pl}^4/f_\phi^2m^2\right)\lesssim c M_{\rm pl}$, consistent with refined WGC bounds~\cite{Rudelius:2022gyu}. The Swampland Distance Conjecture (SDC) likewise disfavors super-Planckian excursions~\cite{Ooguri:2006in,Baume:2016psm,Klaewer:2016kiy,Blumenhagen:2017cxt,Scalisi:2018eaz}. Beyond these consistency limits, statistical studies of flux compactifications indicate that both the axion mass and decay constant are approximately log-uniform over many decades~\cite{Broeckel:2021dpz,Halverson:2019cmy,Mehta:2020kwu,Mehta:2021pwf,Demirtas:2021gsq}.
+Informed by these theoretical constraints, we take $\lambda$, $\log_{10}\chi_i$, $\alpha$, and $\theta_i$ to be uniform over the ranges shown in Table~\ref{tab:kmix_priors}, and we impose log-uniform priors on the axion mass and decay constant by sampling $\log_{10}(m/{\rm eV})$ and $\log_{10}(f/{\rm eV})$ uniformly over the quoted intervals. 
+
+
+However, to construct theory-informed priors on ($w_0,w_a$) for the KMIX model, we need to know the mapping between this prior in theory space into $w_0,w_a$. To do so, we follow the procedure outlined in~\cite{Toomey:2024ita} and \cite{Toomey:2025xyo}, adapted here for the kinetically mixed axion–dilaton system implemented in our own modified implementation of \texttt{CLASS}~\cite{Lesgourgues:2011re}. The first step requires generating a data set of parameters $\theta_{\rm CPL}$ for each set of theory parameters $\theta_{\rm KMIX}$. For each draw from the theory parameter space defined in Tab.~\ref{tab:kmix_priors}, we solve for the expansion history $H_{\rm KMIX}(z)$ and compare it to the CPL prediction by computing the maximum fractional deviation,
+\begin{equation}
+    E_H = \underset{z<4}{\max}\left|
+    \frac{H_{\rm CPL}(z) - H_{\rm KMIX}(z)}{H_{\rm KMIX}(z)}\right|,
+    \label{eq:EH_kmix}
+\end{equation}
+where the range $z<4$ is chosen to be inclusive of all redshifts constrained by DESI~\cite{DESI:2024uvr,DESI:2024aqx}. However, because the phenomenological CPL parametrization cannot perfectly reproduce the complex dynamics of the physical KMIX model, optimizing Eq.~\eqref{eq:EH_kmix} yields a degeneracy of approximate solutions rather than a single, perfect mapping -- see related discussions in \cite{Toomey:2025xyo}.
+
+To address this inherent ambiguity and construct meaningful prior distributions, we adopt a probabilistic approach that naturally propagates the fitting uncertainty into our final priors (see Ref.~\cite{Toomey:2025xyo} for further details). Rather than selecting a single best-fit point, we generate a probability distribution over the $(w_{0},w_{a})$ plane for each model realization, weighted by the inverse square of the matching error, $P(w_{0},w_{a})\propto1/E_{H}^{2}$. This inverse-variance weighting ensures that regions of parameter space providing poor fits to the quintessence dynamics ($E_H \gg 0$) are assigned lower probability, while the spread of the distribution captures the degeneracy and uncertainty inherent in mapping the physical theory to the effective CPL representation.
+
+
+Repeating this procedure over a large ensemble of parameter draws generates a training set of $(w_0, w_a, \omega_{\rm b}, \omega_{\rm c}, H_0)$ samples, from which we learn the conditional density
+\begin{equation}
+    P_{\rm th}(w_0,w_a \mid \omega_{\rm b},\omega_{\rm c},H_0)
+\end{equation}
+using a conditional normalizing flow. In this work, we simulate $N \simeq 100{,}000$ realizations by sampling the parameter ranges outlined in Table~\ref{tab:kmix_priors}.  Once trained, the NF can be used as a smooth, theory-informed prior that can be directly applied to reweight existing MCMC chains in $w_0w_a$CDM, as described in the previous section. For further implementation details, see \cite{Toomey:2024ita}. 
+
+Figure~\ref{fig:placeholder} illustrates the learned theory-informed priors for $(w_0, w_a)$, conditioned on the best-fit \textit{Planck} 2018 $\Lambda$CDM cosmology, alongside the raw training samples generated from KMIX realizations. The close agreement demonstrates the NF's ability to accurately capture the complex, non-Gaussian structure of the mapping from theory space. Markedly distinct from single-field quintessence models, which result in priors strongly peaked near $(w_0, w_a) \simeq (-1,0)$~\cite{Toomey:2025xyo}, the KMIX framework yields a significantly broader distribution. This resulting prior volume is qualitatively similar to the standard uniform priors employed in CPL analyses~\cite{DESI:2024mwx}, particularly along the $w_a$ direction. Consequently, we anticipate that the importance weights $W_i$ (defined in Eq.~\ref{IRW}) will typically remain close to unity, leading to conservative shifts in the final posterior constraints.
+
+\subsection{Inverse Mapping to KMIX Theory Parameters}
+\label{subsec:inverse_mapping}
+
+While the normalizing flow constructed above provides a theory-informed prior on $(w_0, w_a)$ for use in data analyses, it is often more informative to express cosmological constraints directly in terms of the underlying parameters of the KMIX model itself. The CPL parameters, though useful as a phenomenological summary for comparison, compress a high-dimensional theoretical space into a two-parameter effective description that obscures physical correlations between model parameters. To recover these relations, we train a second normalizing flow that learns the inverse mapping from the best-fit CPL parameters $(w_0, w_a)$ back to the fundamental KMIX inputs. Specifically, we train a conditional normalizing flow to approximate the probability distribution
+\begin{equation}
+    P_{\mathrm{inv}}(\lambda,\,\chi_i,\,\alpha,\,\theta_i,\,f_\phi,\,m \mid w_0,\,w_a, H_0, \omega_{\rm b}, \omega_{\rm cdm}).
+\end{equation}
+Once trained, this flow enables us to take the reweighted chains described above and infer the underlying KMIX model parameters $\theta_{\rm KMIX}$, providing a direct bridge between the baseline phenomenological analysis and the underlying high-energy theory.
+
+This approach offers three key advantages. First, it connects cosmological data directly to physically meaningful parameters, facilitating direct comparison with theoretical expectations such as Swampland or Weak Gravity Conjecture bounds. Second, it recovers parameter correlations and degeneracies that are otherwise obscured by the $(w_0, w_a)$ compression, providing a clearer physical interpretation of the inferred dark energy dynamics. Finally, this method yields a massive increase in inference speed: whereas direct MCMC sampling of complex particle models can require years of aggregate CPU compute time to converge, our pipeline requires only $\mathcal{O}(1)$ hour to generate the training dataset with \texttt{CLASS} and mere minutes to train the normalizing flow, enabling rapid high-dimensional parameter reconstruction without rerunning the full analysis.
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\linewidth]{w0wa_post_qmix.pdf}
+    \caption{Two-dimensional posterior distributions in the $(w_0,\,w_a)$-plane at the 68\% and 95\% confidence levels for the kinetically mixed axion--dilaton (KMIX) model. The analysis combines \textit{Planck} PR4 CMB anisotropies (with lensing) and DESI DR2 BAO, shown in \textcolor{tabpurple}{purple}, and separately includes Type~Ia supernova datasets from Pantheon+ (\textcolor{tabblue}{blue}), Union~3 (\textcolor{taborange}{orange}), and DES~Y5 (\textcolor{tabgreen}{green}). The gray dashed lines denote the $\Lambda$CDM limit, $(w_0,\,w_a)=(-1,\,0)$.
+}
+    \label{fig:cmb-bao-kmix}
+\end{figure}
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{bao_compare.pdf}
+    \caption{Comparison of best-fit predictions for DESI DR2 BAO distance scales relative to the best-fit {\it Planck} $\Lambda$CDM baseline. The panels show the volume-averaged distance $D_V/r_d$ (left), the transverse comoving distance $D_M/r_d$ (center), and the Hubble distance $D_H/r_d$ (right). Black points indicate DESI DR2 measurements with $1\sigma$ errors. The \textcolor{tabred}{red} line corresponds to the best-fit KMIX model, plotted using the corresponding $(w_{0}^{\rm (eff)}, w_{\rm a}^{\rm (eff)})$, while the black dot-dashed line represents the best-fit standard CPL value.}
+    \label{fig:bao-compare}
+\end{figure*}
+
+\section{Analysis and Data Sets}\label{sec:analysis}
+
+
+For our base ($w_0,w_a$) chains, which we use to construct our KMIX constraints as described in the previous section,  we analyze three primary dataset configurations: (1) \textit{Planck} CMB data combined with DESI DR2 BAO measurements, 
+(2) CMB+BAO further supplemented with Type Ia supernovae (SNe) likelihoods,
+and (3) CMB+BAO+SNe (from Pantheon+) 
+enhanced with the full-shape (FS)
+galaxy power spectrum
+and bispectrum likelihood
+from DESI DR1~\cite{Chudaykin:2025aux}. 
+For the CMB constraints, we use the \textit{Planck} PR4 data release, incorporating NPIPE-based high- and low-$\ell$ temperature and polarization likelihoods together with the PR4 lensing likelihood~\cite{Efstathiou:2019mdh,Rosenberg:2022sdy,Carron:2022eyg}. This release provides the most internally consistent and robust \textit{Planck} measurements to date, offering improved foreground mitigation and noise modeling relative to the legacy release.
+BAO constraints are taken from the latest DESI DR2 measurements \cite{DESI:2025zgx}, which deliver the most precise distance-scale determinations across a wide redshift range. For Type Ia supernovae, we include three independent compilations—Pantheon+~\cite{Scolnic:2021amr,Brout:2022vxf}, Union3~\cite{Rubin:2023jdq}, and DES Year~5 (DES Y5)~\cite{DES:2024jxu}—to test the robustness of our results across distinct samples. 
+We note that a recent recalibration of DES~Y5 has reduced the evidence for dynamical dark energy~\cite{Popovic2025:Dovekie_1,Popovic2025:Dovekie_2}.
+
+
+
+All likelihoods except FS are implemented within the \texttt{Cobaya} framework~\citep{Torrado:2020dgo}, using its default configurations for supernova analyses. 
+Cosmological observables are modeled using the default CPL implementation in the Einstein–Boltzmann solver \texttt{CLASS}~\cite{Blas:2011rf}, including perturbations for likelihood evaluation. Following~\cite{DESI:2025zgx}, we adopt broad uniform priors on the parameter set $(\omega_{\rm c},\omega_{\rm b}, 100\theta_{\rm MC}, \log(10^{10}A_{\rm s}), n_{\rm s}, \tau, w_0, w_a)$—comprising the six standard $\Lambda$CDM parameters plus the two CPL parameters—with $w_0 \in \mathcal{U}[-3,1]$ and $w_a \in \mathcal{U}[-3,2]$. Posterior distributions are sampled via MCMC using the Metropolis–Hastings algorithm~\cite{2005math......2099N}, and chains are run until achieving Gelman–Rubin convergence~\cite{10.1214/ss/1177011136} with $R - 1 < 0.01$. We report one-dimensional marginalized posteriors as means with 68\% minimum credible intervals, analyzing all MCMC outputs using \texttt{GetDist}~\cite{Lewis:2019xzd}. 
+
+As far as the full-shape
+galaxy and quasar power spectrum and bispectrum data are concerned, 
+we use the MCMC chains 
+obtained with the custom 
+DESI FS likelihood
+of~\cite{Chudaykin:2025aux}
+obtained using methodologies 
+from~\cite{Ivanov:2019pdj,Chudaykin:2020aoj,Chudaykin:2020ghx,Ivanov:2021kcd,Ivanov:2021zmi,Philcox:2021kcw,Chudaykin:2022nru} (see also~\cite{DAmico:2019fhj,DAmico:2020kxu,Chen:2021wdi,Zhang:2021yna,Chudaykin:2024wlw}) and
+supplemented 
+with simulation-based priors~\cite{Ivanov:2024jtl,Ivanov:2025qie,Chen:2025jnr} (see also~\cite{Sullivan:2021sof,Akitsu:2024lyt,Cabass:2024wob,Zhang:2024thl,DESI:2025wzd}). Details of this analysis 
+can be found in~\cite{Chudaykin:2025auz}.
+
+
+To obtain constraints on the KMIX model without running computationally expensive chains directly in the high-dimensional theory space, we employ importance sampling on the CPL chains. The target posterior for the KMIX model, $\mathcal{P}_{\rm KMIX}$, is related to the distribution sampled by our base MCMC, $\mathcal{P}_{\rm base}$, via the ratio of their priors. Specifically, for a sample point $i$ with parameters $\mathbf{\theta}_i = \{w_{0,i}, w_{a,i}, \mathbf{\theta}_{{\rm bg},i}\}$, the importance weight $W_i$ is given by:
+\begin{equation}
+    W_i = \frac{P_{\rm th}(w_{0,i}, w_{a,i} \mid \mathbf{\theta}_{{\rm bg},i})}{\pi_{\rm uni}(w_{0,i}, w_{a,i})},
+    \label{IRW}
+\end{equation}
+where $\pi_{\rm uni}$ is the flat prior used in the base CPL analysis, and $P_{\rm th}$ is the theory-informed prior learned by the conditional NF described in the last section. The background parameters $\mathbf{\theta}_{\rm bg}$ (e.g., $H_0$, $\omega_m$) are included in the conditioning to ensure that correlations inherent to the specific dataset (e.g., the geometric degeneracy in BAO) are correctly propagated into the KMIX constraints. Lastly, we also use the inverse NF described in the last section to add the KMIX model parameters $\theta_{\rm KMIX}$ as derived parameters to generate our high fidelity KMIX chains.
+
+
+
+\section{Results \label{sec:results}}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\linewidth]{triangle_w0_wa_fs.pdf}
+    \caption{Two-dimensional posterior distributions in the {\it projected} $(w_0,\,w_a)$-plane at the 68\% and 95\% confidence levels from the analysis~\cite{Chudaykin:2025aux,Chudaykin:2025auz}
+    based on DESI DR2 BAO, \textit{Planck} CMB, Pantheon+ SNe, and DESI DR1 full-shape data. Results are shown for the KMIX (\textcolor{tabred}{red}) and $w_0w_a$CDM (\textcolor{tabblue}{blue}) models. The gray dashed lines indicate the $\Lambda$CDM limit, $(w_0,\,w_a)=(-1,\,0)$. While both models suggest consistency (with $\Lambda$CDM within $\sim\!2\sigma$) KMIX exhibits a slightly weaker apparent deviation.
+}
+    \label{fig:fs_constraint}
+\end{figure}
+
+
+\subsection{Baseline DESI Analysis}
+
+
+We begin with the baseline combination of \textit{Planck}~PR4 CMB anisotropies and DESI~DR2 BAO distance-scale measurements. The resulting constraints for KMIX, mapped into the $(w_0,w_a)$ plane, are shown in Fig.~\ref{fig:cmb-bao-kmix}. These contours represent the range of effective CPL parameters that arise from KMIX cosmologies capable of matching the observed expansion history.
+For this dataset combination, KMIX exhibits a moderate preference for evolving dark energy relative to the $\Lambda$CDM limit. As summarized in Table~\ref{tab:sigma_values}, the effective deviation corresponds to $2.5\sigma$, indicating that the two-field axion--dilaton system readily produces the mild phantom-crossing behavior favored by DESI. Importantly, the KMIX contours occupy the same qualitative region as the CPL fit—shifted away from $(w_0,w_a)=(-1,0)$ and lying in the quadrant associated with $w(a)<-1$ at intermediate redshifts—demonstrating that the model naturally reproduces the broad evolution pattern inferred from the data. This differs from the results for canonical scalar fields where there is minimal support for phantom dynamics (e.g., see Fig.~3 in \cite{Toomey:2025xyo}). 
+
+When Type~Ia supernova samples are incorporated, the KMIX preference strengthens for two of three SNe samples, in line with expectations from the CPL analyses. Adding Pantheon+ weakens the preference to $2.1\sigma$ while Union3 and DES~Y5 shifts contours further from $\Lambda$CDM, with nominal deviations at $3.1\sigma$ to $3.4\sigma$, respectively. These results track the same hierarchy seen in CPL fits: high-redshift supernovae (Union3 and DES~Y5) reinforce the DESI pull toward evolving dark energy more strongly than Pantheon+. In each case, the KMIX contours remain consistent with the CPL-derived region but tend to lie slightly closer to the $\Lambda$CDM boundary, reflecting the fact that KMIX realizes a more restricted subset of phantom-like trajectories. This can also be understood from the differences in the effective prior on ($w_0,w_a$), i.e. Fig.~\ref{fig:placeholder}, relative to the standard CPL analysis with uniform $(w_0,w_a)$ priors.
+
+In Fig.~\ref{fig:placeholder_2} of the Appendix we see that the KMIX posteriors select a region of parameter space that aligns well with what one would reasonably expect from a kinetically mixed axion–dilaton model that exhbitis apparent phantom behavior. The axion is pushed toward an initial angle close to $\pi$, placing it near the top of its potential and naturally giving rise to stable slow-roll dynamics. The dilaton begins well below the Planck scale, consistent with the expectations of the Distance Conjecture and with staying in the regime where the exponential kinetic coupling remains trustworthy. The mixing parameter $\lambda$ comes out to be order unity—precisely the range suggested by explicit constructions—and the axion mass sits modestly above $H_0$, as one would anticipate for a field whose late-time evolution drives the effective phantom crossing. Meanwhile, the decay constant remains comfortably sub-Planckian, with $\log_{10}(f_\phi/{\rm eV})\simeq 25.9$, avoiding the usual quantum-gravity tensions associated with $f_\phi \sim M_{\rm pl}$. Altogether, the preferred KMIX parameters form a coherent and theoretically sensible picture, and the resulting best-fit expansion history provides an excellent match to the DESI-preferred CPL behavior. This is illustrated in Fig.~\ref{fig:bao-compare}, where the KMIX prediction for the BAO closely tracks the best-fit $w_0,w_a$CDM from the DESI analysis. 
+
+\begin{table}[!t]
+\centering
+\caption{Significance of deviations from $\Lambda$CDM in the KMIX model for different datasets and in the CPL model. }
+\vspace{4pt}
+\label{tab:sigma_values}
+\begin{minipage}{\columnwidth}
+\centering
+\normalsize
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{lcc}
+\hline\hline
+\textbf{Dataset} & \textbf{KMIX} & \textbf{CPL} \\
+\hline
+Planck+DESI              & $2.5\sigma$ & $3.1\sigma$ \\
+Planck+DESI+Pantheon+    & $2.1\sigma$ & $2.5\sigma$ \\
+Planck+DESI+Union3       & $3.1\sigma$ & $3.9\sigma$ \\
+Planck+DESI+DES~Y5       & $3.4\sigma$ & $4.0\sigma$ \\
+\hline
+Full Shape               & $1.7\sigma$ & $2.0\sigma$ \\
+\hline\hline
+\end{tabular}
+\end{minipage}
+\end{table}
+
+
+
+
+\subsection{Full-shape constraints}
+
+We now extend our analysis to include the DESI full-shape galaxy power spectrum and bispectrum, combined with the baseline BAO, \textit{Planck}~PR4 CMB, and Pantheon+ supernova constraints. As established in standard CPL studies, the FS data exerts a strong pull toward the $\Lambda$CDM limit, reducing the preference for evolving dark energy from $2.5\sigma$ to $2.0\sigma$ relative to geometric fits~\cite{Chudaykin:2025aux}.
+
+Figure~\ref{fig:fs_constraint} demonstrates that this data-driven convergence is even more pronounced for the KMIX model. Starting from a preference of $2.1\sigma$ for the corresponding geometric combination (with Pantheon+), the inclusion of FS data further reduces the effective deviation to $1.7\sigma$ (see Table~\ref{tab:sigma_values}). While the FS data is the primary driver shifting both posteriors toward $(w_0, w_a)=(-1,0)$, the KMIX contours retract further because the standard CPL parameterization possesses significantly more prior volume in the deep phantom regime to support the non-$\Lambda$CDM limit of the parameter space.
+
+Figure~\ref{fig:placeholder_3} in the Appendix presents the constraints on the underlying KMIX parameters derived from the full-shape analysis. While the preferred regions of parameter space remain qualitatively consistent with the baseline geometric results, the marginalized posteriors for the physical parameters notably broaden. This degradation in constraining power is a direct consequence of the data shifting the posterior closer to the $\Lambda$CDM limit: as the preferred phenomenological solution approaches $w(z) \approx -1$, the leverage to distinguish specific dynamical signatures of the kinetic coupling diminishes. Consequently, we observe increased posterior support for axion masses near $m \sim 10^{-33}$~eV, corresponding to a regime where the field remains frozen in slow roll, thereby suppressing the unique phantom-like dynamics that would otherwise distinguish the model from a cosmological constant.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{mPk-diff.pdf}
+    \caption{Fractional difference in the linear matter power spectrum between $w_0w_a$CDM and the KMIX power spectrum using parameters calculated from the inverse mapping where $\Delta P = P_{KMIX} - P_{CPL}$.}
+    \label{fig:placeholder_4}
+\end{figure}
+
+
+While the CPL parametrization can effectively mimic the background expansion history of the KMIX model, the degeneracy is broken at the level of perturbations. Figure~\ref{fig:placeholder_4} illustrates the fractional difference in the linear matter power spectrum, $P(k)$, between the full KMIX theory and a $w_0w_a$CDM model with parameters derived from our inverse mapping. The visible deviations arise because the scalar fields in KMIX possess internal dynamics and clustering properties (e.g., $c_s^2 \neq 1$) that are not captured by the standard fluid approximation of CPL. 
+In particular, the KMIX model produces an additional $\sim 5\%$ suppression of power on large scales ($k\lesssim 0.1~h\text{Mpc}^{-1}$), consistent with the previous BOSS full-shape 
+measurements~\cite{Philcox:2021kcw,Chen:2024vuf},
+and $\approx 1\%$ enhancement of power on
+ small scales 
+$k\approx  1~h\text{Mpc}^{-1}$,
+which can be probed with the Lyman-$\alpha$
+forest data~\cite{Goldstein:2023gnw,Ivanov:2024jtl}.
+This demonstrates that geometric probes like BAO are insufficient to fully distinguish the models on their own. Instead, high-precision measurements of the growth of structure are required. 
+Consequently, future high-volume spectroscopic surveys such as Spec-S5/MegaMapper~\cite{Spec-S5:2025uom} will be essential for identifying these specific signatures and distinguishing physical multi-field quintessence models like KMIX from phenomenological parametrizations.
+
+\section{Conclusion} \label{sec:conclusion}
+
+In this work, we have examined whether the apparent phantom-like behavior suggested by DESI BAO measurements can be understood within a concrete, theoretically motivated framework, in contrast to the phenomenological CPL parameterization. To this end, we studied the cosmology of a two-field system inspired by the most general structure of the axion--dilaton sector of string axions. In this scenario, an axion-like field is kinetically coupled to a dilaton-like field. The fields play the role of a two-field quintessence model, which further enables an energy transfer between the two sectors. This mechanism naturally generates an \emph{effective} phantom phase in the dark-energy equation of state, even though the total system always remains non-phantom and satisfies the Null Energy Condition.
+
+Mapping KMIX into the $(w_0,w_a)$ plane allows for a direct comparison with DESI analyses of the background expansion history. For the baseline \textit{Planck}~PR4 + DESI~DR2 BAO dataset, we find an effective $2.5\sigma$ preference for KMIX relative to $\Lambda$CDM. 
+The corresponding KMIX contours, shown in Fig.~\ref{fig:cmb-bao-kmix}, lie in the same quadrant favored by CPL analyses—shifted away from $(w_0,w_a)=(-1,0)$, toward the region associated with an apparent phantom crossing—illustrating that KMIX naturally reproduces the qualitative evolution preferred by the data.  When Type~Ia supernovae are included, this preference strengthens to the $2.1$--$3.4\sigma$ level depending on the compilation (Pantheon+, Union3, or DES~Y5), with higher-redshift samples driving the largest deviations. In each case, the KMIX contours track the CPL posteriors but tend to sit closer to the $\Lambda$CDM boundary, consistent with the fact that only a subset of extreme CPL-like trajectories are realizable within the underlying two-field dynamics, as visualized in Fig.~\ref{fig:placeholder}. 
+
+Including DESI full-shape information leads to the expected tightening of constraints and a corresponding reduction in the apparent evidence for dynamical dark energy. Within this more constraining likelihood, KMIX remains fully compatible with the data and still allows a mild deviation from $\Lambda$CDM at the $\sim 1.7\sigma$ level. The resulting $(w_0,w_a)$ contours again mirror those from the CPL analysis, but with slightly reduced departure from $(w_0,w_a)=(-1,0)$, reflecting the more restricted space of effective histories that KMIX can generate.
+
+Beyond these cosmological results, a key outcome of this work is methodological. By using conditional normalizing flows to learn the mapping between the high-dimensional KMIX theory space and its effective CPL representation—explicitly accounting for correlations with the background $\Lambda$CDM parameters—we are able to map a realistic, string-motivated model onto the $(w_0,w_a)$ plane and then invert that mapping to obtain direct constraints on the underlying parameters. This strategy enables a direct, like-for-like comparison between physical models and phenomenological fits, while dramatically reducing the computational cost relative to a full MCMC exploration of the KMIX parameter space. Although developed here for a specific axion--dilaton construction, this framework is general and can be applied to a broad class of multi-field dark-energy models or modified-gravity scenarios, provided their expansion histories are sufficiently captured by the CPL parametrization.
+
+Taken together, our results suggest a conservative yet intriguing picture. Current late-time data do not require truly phantom dark energy; instead, they remain fully compatible with a non-phantom theory in which kinetic mixing produces an effective phantom signature when viewed through the CPL lens. Future data---including upcoming DESI
+and DESI-II measurements, improved CMB measurements, and next-generation supernova and lensing surveys---will determine whether this ``phantom illusion'' persists. In particular, high-volume surveys such as Spec-S5/MegaMapper will be able to further distinguish these models by constraining the unique signatures from differences in the evolution of perturbations and their imprints on the linear matter power spectrum. Should the preference for evolving dark energy strengthen, models such as KMIX provide a natural and theoretically consistent arena in which to interpret it.
+
+
+\section*{Acknowledgments}
+We thank Stephon Alexander, Heliudson Bernardo, and
+Justin Khoury for useful discussions.
+We thank Anton Chudaykin 
+for sharing with us 
+DESI 
+MCMC chains
+from the full-shape 
+likelihood.
+This material is based upon work supported by the U.S. Department of Energy, Office of Science, Office of High Energy Physics of U.S. Department of Energy under grant Contract Number  DE-SC0012567. M.W.T.  acknowledges financial support from the Simons Foundation (Grant Number 929255).
+JMS acknowledges that support for this work was provided by The Brinson Foundation through a Brinson Prize.
+
+\bibliography{bibo}
+
+\newpage 
+
+\pagebreak
+\widetext
+
+\appendix
+
+\newpage
+
+\section{Extra Plots and Tables}\label{appendix}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\linewidth]{cmb_bao_inv_triangle.pdf}
+    \caption{Full constraints at the 68\% and 95\% confidence levels for the kinetically mixed axion--dilaton (KMIX) model. The analysis combines \textit{Planck} PR4 CMB anisotropies (with lensing) and DESI DR2 BAO, shown in \textcolor{tabpurple}{purple}, and separately includes Type~Ia supernova datasets from Pantheon+ (\textcolor{tabblue}{blue}), Union~3 (\textcolor{taborange}{orange}), and DES~Y5 (\textcolor{tabgreen}{green}).}
+    \label{fig:placeholder_2}
+\end{figure}
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{full_shape_inv_triangle.pdf}
+    \caption{Full constraints at the 68\% and 95\% confidence levels for the kinetically mixed axion--dilaton (KMIX) model from the analysis~\cite{Chudaykin:2025aux,Chudaykin:2025auz}
+    based on DESI DR2 BAO, \textit{Planck} CMB, Pantheon+ SNe, and DESI DR1 full-shape data.}
+    \label{fig:placeholder_3}
+\end{figure}
+
+
+
+\begin{table*}[t]
+\centering
+\caption{
+Summary of constraints for the CPL model (uniform prior in $w_0,w_a$) and the KMIX model.
+For KMIX, $(w_0^{\rm (eff)},w_a^{\rm (eff)})$ denote the effective CPL parameters obtained by matching the KMIX expansion history to $H_{\rm CPL}(z)$ over the redshift range relevant for the data.
+Quoted values are posterior means with 68\% minimum credible intervals, or one-sided 68\% limits where indicated.
+}
+\label{tab:cpl_kmix_compact}
+\begin{tabular}{lccccc}
+\hline\hline
+ & CMB+DESI BAO & +Pantheon+ & +Union3 & +DES~Y5 & CMB+DESI FS \\
+\hline
+\multicolumn{6}{c}{\textbf{$w_0w_a$CDM}}\\
+\hline
+$\log(10^{10} A_\mathrm{s})$ 
+& $3.033 \pm 0.014$
+& $3.038 \pm 0.014$
+& $3.035 \pm 0.014$
+& $3.036 \pm 0.014$
+& $3.035 \pm 0.013$ \\[3pt]
+
+$n_\mathrm{s}$ 
+& $0.9638 \pm 0.0038$
+& $0.9650 \pm 0.0037$
+& $0.9645 \pm 0.0037$
+& $0.9646 \pm 0.0036$
+& $0.9700 \pm 0.0036$ \\[3pt]
+
+$\Omega_\mathrm{b} h^2$ 
+& $0.02218 \pm 0.00013$
+& $0.02223 \pm 0.00013$
+& $0.02220 \pm 0.00013$
+& $0.02221 \pm 0.00013$
+& $0.02247 \pm 0.00013$ \\[3pt]
+
+$\Omega_\mathrm{c} h^2$ 
+& $0.11942 \pm 0.00087$
+& $0.11887 \pm 0.00084$
+& $0.11915 \pm 0.00084$
+& $0.11906 \pm 0.00085$
+& $0.11829 \pm 0.00083$ \\[3pt]
+
+$w_0$ 
+& $-0.45 \pm 0.21$
+& $-0.843 \pm 0.055$
+& $-0.681 \pm 0.089$
+& $-0.757 \pm 0.057$
+& $-0.868 \pm 0.052$ \\[3pt]
+
+$w_a$ 
+& $-1.64 \pm 0.59$
+& $-0.59^{+0.21}_{-0.19}$
+& $-1.03^{+0.30}_{-0.27}$
+& $-0.83^{+0.23}_{-0.21}$
+& $-0.42 \pm 0.18$ \\[3pt]
+
+$H_0\,[\mathrm{km\,s^{-1}\,Mpc^{-1}}]$ 
+& $63.8^{+1.8}_{-2.1}$
+& $67.49 \pm 0.60$
+& $65.96 \pm 0.85$
+& $66.71 \pm 0.56$
+& $67.53 \pm 0.57$ \\[3pt]
+
+$\Omega_\mathrm{m}$ 
+& $0.350 \pm 0.022$
+& $0.3112 \pm 0.0058$
+& $0.3266 \pm 0.0087$
+& $0.3190 \pm 0.0056$
+& $0.3102 \pm 0.0055$ \\[3pt]
+
+$\sigma_8$ 
+& $0.779^{+0.016}_{-0.018}$
+& $0.8071 \pm 0.0087$
+& $0.7958 \pm 0.0096$
+& $0.8015 \pm 0.0084$
+& $0.7999 \pm 0.0076$ \\[3pt]
+
+\hline
+\multicolumn{6}{c}{\textbf{KMIX}}\\
+\hline
+$\log(10^{10} A_\mathrm{s})$ 
+& $3.034 \pm 0.014$
+& $3.039 \pm 0.014$
+& $3.036 \pm 0.014$
+& $3.036 \pm 0.014$
+& $3.037 \pm 0.013$ \\[3pt]
+
+$n_\mathrm{s}$ 
+& $0.9641 \pm 0.0038$
+& $0.9655 \pm 0.0037$
+& $0.9646 \pm 0.0037$
+& $0.9648 \pm 0.0037$
+& $0.9706 \pm 0.0036$ \\[3pt]
+
+$\Omega_\mathrm{b} h^2$ 
+& $0.02219 \pm 0.00013$
+& $0.02224 \pm 0.00013$
+& $0.02221 \pm 0.00013$
+& $0.02222 \pm 0.00013$
+& $0.02248 \pm 0.00013$ \\[3pt]
+
+$\Omega_\mathrm{c} h^2$ 
+& $0.11933 \pm 0.00088$
+& $0.11869 \pm 0.00088$
+& $0.11909 \pm 0.00086$
+& $0.11897 \pm 0.00088$
+& $0.11804 \pm 0.00084$ \\[3pt]
+
+$w_0^{\rm (eff)}$ 
+& $-0.50 \pm 0.21$
+& $-0.855 \pm 0.059$
+& $-0.691 \pm 0.089$
+& $-0.762 \pm 0.059$
+& $-0.885^{+0.049}_{-0.057}$ \\[3pt]
+
+$w_a^{\rm (eff)}$ 
+& $-1.51 \pm 0.60$
+& $-0.52 \pm 0.22$
+& $-0.99 \pm 0.30$
+& $-0.80 \pm 0.24$
+& $-0.35^{+0.21}_{-0.16}$ \\[3pt]
+
+$H_0\,[\mathrm{km\,s^{-1}\,Mpc^{-1}}]$ 
+& $64.2^{+1.8}_{-2.1}$
+& $67.47 \pm 0.60$
+& $65.99 \pm 0.83$
+& $66.68 \pm 0.56$
+& $67.54 \pm 0.56$ \\[3pt]
+
+$\Omega_\mathrm{m}$ 
+& $0.345 \pm 0.021$
+& $0.3111 \pm 0.0058$
+& $0.3261 \pm 0.0086$
+& $0.3190 \pm 0.0056$
+& $0.3096 \pm 0.0055$ \\[3pt]
+
+$\sigma_8$ 
+& $0.782 \pm 0.017$
+& $0.8058 \pm 0.0088$
+& $0.7957 \pm 0.0094$
+& $0.8008 \pm 0.0085$
+& $0.7987 \pm 0.0075$ \\[3pt]
+
+
+$\lambda$ 
+& $-1.3^{+1.3}_{-1.5}$
+& $-1.45^{+1.2}_{-0.72}$
+& $-1.45^{+1.2}_{-0.72}$
+& $-1.46^{+1.1}_{-0.72}$
+& $> -1.76$ \\[3pt]
+
+$\log_{10}\chi_i$ 
+& $-2.9^{+3.8}_{-3.1}$
+& $< -1.75$
+& $-3.0^{+3.9}_{-3.0}$
+& $< -1.95 $
+& $< -1.75$ \\[3pt]
+
+$\alpha$ 
+& $> 5.28$
+& $> 4.71$
+& $> 5.37$
+& $> 5.27$
+& $> 3.78$ \\[3pt]
+
+$\theta_i$ 
+& $> 3.11$
+& $> 3.07$
+& $3.085^{+0.041}_{+0.0033}$
+& $> 3.11$
+& $> 2.76$ \\[3pt]
+
+$\log_{10}(f_\phi/\mathrm{eV})$ 
+& $25.65^{+0.23}_{-0.48}$
+& $25.85^{+0.30}_{-0.49}$
+& $25.68^{+0.26}_{-0.47}$
+& $25.72^{+0.27}_{-0.45}$
+& $26.06^{+0.42}_{-0.62}$ \\[3pt]
+
+$\log_{10}(m/\mathrm{eV})$ 
+& $-32.16^{+0.17}_{-0.054}$
+& $-32.24^{+0.24}_{-0.15}$
+& $-32.18^{+0.18}_{-0.053}$
+& $-32.20^{+0.19}_{-0.061}$
+& $-32.29^{+0.25}_{-0.40}$ \\[2pt]
+\hline\hline
+\end{tabular}
+\end{table*}
+
+
+
+
+\end{document}

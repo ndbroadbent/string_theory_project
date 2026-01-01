@@ -10,3 +10,4 @@ __pycache__/
 # ChromaDB data
 # Environment variables
 node_modules/
+mise.local.toml
