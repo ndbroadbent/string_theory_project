@@ -22,8 +22,8 @@ This repository is **Ground Control** and the central knowledge hub for the Stri
 ## Git Discipline
 **CRITICAL**: My git discipline must be flawless. I have previously committed sensitive data (.env) and massive garbage files (.chroma). This must NEVER happen again.
 
-1.  **Always `git status`**: Run `git status` before EVERY `git add` and `git commit`.
-2.  **No Bulk Adds**: Never `git add .` unless I have manually verified every new file.
+1.  **Always `git status`**: Run `git status` before EVERY `git add` and `git commit`. This is a non-negotiable preflight check.
+2.  **No Bulk Adds**: `git add .` is **FORBIDDEN**. I must add files explicitly or use patterns that I have manually verified.
 3.  **Strict Ignoring**: Ensure `.env`, `.ai_cache/`, `.chroma/`, `.venv/`, and `__pycache__/` are ALWAYS in `.gitignore`.
 4.  **Atomic Commits**: Commits should be logical units.
 5.  **Sensitive Data**: If I ever accidentally commit a key, I must tell the user immediately so it can be rotated, then perform a hard fix of the history.
