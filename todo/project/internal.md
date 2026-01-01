@@ -27,8 +27,8 @@ This file tracks tasks for improving the project management system itself (Gemin
     - [x] Run `bin/semgrep-index` to populate the initial index.
     - [x] Verify `bin/semgrep` works across submodules.
     - [x] Index all critical and useful research papers in `research/papers/`.
-- [ ] Implement `pdftotext` conversion for missing DESI papers (where .tex is unavailable).
-- [ ] Add more recent DESI papers (arXiv:2404.03002, etc.) as requested.
+- [x] Implement `pdftotext` conversion for missing DESI papers (where .tex is unavailable).
+- [x] Add more recent DESI papers (arXiv:2404.03002, etc.) as requested (Used LaTeX source).
 - [ ] **Submodules**:
     - [ ] Verify `git submodule update --remote` workflow works locally.
 
