@@ -3,6 +3,11 @@
 This file tracks tasks for improving the project management system itself (Gemini's internal operations).
 
 ## Knowledge Base Migration & Organization
+- [ ] **Recovery Phase**:
+    - [ ] Re-migrate `research/papers/*.tex` from `string_theory/resources/`.
+    - [ ] Re-create `prds/CYRUS_VERIFICATION_PIPELINE.md`.
+    - [ ] Re-create `prds/PLAYGROUND.md`.
+    - [ ] Re-create `handoffs/20260101_cyrus_verification.md`.
 - [ ] **Audit & Categorize**:
     - [ ] Complete inventory of `reference/cyrus` docs.
     - [ ] Complete inventory of `reference/string_theory_search` docs.
