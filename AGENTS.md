@@ -68,19 +68,17 @@ When new information arrives (user chat, new paper, feedback):
 
 ## Tooling Instructions
 
+### External Tools
+- **Exopriors (Alignment Scry)**:
+    - **Purpose**: Semantic search over ~60M alignment/physics documents (ArXiv, LessWrong, etc.).
+    - **Usage**: Use `curl` to query `https://api.exopriors.com/v1/alignment/query`.
+    - **Key**: `$EXOPRIORS_API_KEY` (in `.env`).
+    - **Docs**: `research/EXOPRIORS_PROMPT.txt` contains the full API schema and vector strategy.
+    - **Use Case**: Literature review, finding prior art (like "GA for flux vacua"), and monitoring new papers.
+
 ### Indexing
-**Strategy**: We index **THIS repo** (The Brain). We do **NOT** index `reference/` (The Hands), because all knowledge should be migrated here.
+**STATUS: ONLINE** (Model: `text-embedding-3-large`). 
 
-**CRITICAL**: Indexing can be expensive.
-1.  **Allowlist**: `scripts/index_allowlist.txt` controls `.tex` and other non-markdown files.
-2.  **Auto-Index**: All `.md` files in this repo are indexed automatically.
-3.  **Reference Blocked**: `reference/` is blocked by default.
-
-To rebuild the index:
-```bash
-bin/semgrep-index
-```
-*(Note: This requires `OPENAI_API_KEY` in `.env`)*
 
 ### Submodules
 I read code from `reference/`. If I need to see the latest work:
