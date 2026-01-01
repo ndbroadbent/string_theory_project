@@ -653,3 +653,8 @@ def test_desi_targets():
 - Slow-roll approximation is used where possible for speed
 - Full evolution is ~seconds per configuration (not a bottleneck)
 - The 10⁻¹²² problem remains - we still need tiny V(T_today)
+
+## Related Documentation
+- [[project_docs/FORMULAS.md|Physics Formulas (Section 8: Quintessence)]]
+- [[research/COSMOLOGICAL_CONSTANT.md|Cosmological Constant and DESI Measurements]]
+- [[research/papers/MISSING.md|Tracking Missing DESI/Quintessence Papers]]

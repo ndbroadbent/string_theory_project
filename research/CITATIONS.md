@@ -9,13 +9,13 @@ This document tracks all papers, databases, and tools used in this project. **Al
 ### McAllister et al. - Small Cosmological Constants (Ground Truth)
 - **arXiv**: [2107.09064](https://arxiv.org/abs/2107.09064)
 - **Title**: "Small cosmological constants in string theory"
-- **Local PDF**: `resources/small_cc_2107.09064.pdf`
+- **Local PDF**: [[research/papers/small_cc_2107.09064.pdf]]
 - **Used for**:
   - Ground truth validation (polytope 4-214-647)
   - KKLT moduli stabilization formulas
   - Racetrack mechanism for W₀ computation
   - V₀ = -3 e^{K₀} (g_s^7 / (4V[0])²) W₀² formula
-- **Key data**: `resources/small_cc_2107.09064_source/anc/paper_data/4-214-647/`
+- **Key data**: `research/papers/small_cc_2107.09064_source/anc/paper_data/4-214-647/`
 
 ---
 
@@ -24,7 +24,7 @@ This document tracks all papers, databases, and tools used in this project. **Al
 ### Altman et al. - Orientifold CY3 Database
 - **arXiv**: [2111.03078](https://arxiv.org/abs/2111.03078)
 - **Title**: "Orientifold Calabi-Yau Threefolds with Divisor Involutions and String Landscape"
-- **Local PDF**: `resources/orientifold_cy_divisor_involutions_2111.03078.pdf`
+- **Local PDF**: [[research/papers/orientifold_cy_divisor_involutions_2111.03078.pdf]]
 - **Database**: http://www.rossealtman.com/toriccy/
 - **Used for**:
   - Computing Hodge numbers of individual divisors h•(D, O_D)
@@ -41,7 +41,9 @@ This document tracks all papers, databases, and tools used in this project. **Al
 ### CYTools
 - **arXiv**: [2211.03823](https://arxiv.org/abs/2211.03823)
 - **Title**: "CYTools: A Software Package for Analyzing Calabi-Yau Manifolds"
-- **Local PDF**: `resources/cytools_paper_2211.03823.pdf`
+- **Local PDF**: [[research/papers/cytools_paper_2211.03823.pdf]]
+- **Abstract**:
+  > We provide a user's guide to version 1.0 of the software package CYTools, which we designed to compute the topological data of Calabi-Yau hypersurfaces in toric varieties. CYTools has strong capabilities in analyzing and triangulating polytopes, and can easily handle even the largest polytopes in the Kreuzer-Skarke list. We explain the main functions and the options that can be used to optimize them, including example computations that illustrate efficient handling of large numbers of polytopes. The software, installation instructions, and a Jupyter notebook tutorial can be found at this https URL.
 - **Repository**: https://github.com/LiamMcAllisterGroup/cytools
 - **Used for**:
   - Polytope analysis, triangulations
@@ -82,17 +84,17 @@ This document tracks all papers, databases, and tools used in this project. **Al
 
 ### Demirtas et al. - Vacua with Small W₀
 - **arXiv**: [1912.10047](https://arxiv.org/abs/1912.10047)
-- **Local PDF**: `resources/vacua_small_W0_1912.10047.pdf`
+- **Local PDF**: [[research/papers/vacua_small_W0_1912.10047.pdf]]
 - **Used for**: Methods for finding flux vacua with exponentially small W₀
 
 ### Demirtas et al. - GA for Flux Vacua
 - **arXiv**: [1907.10072](https://arxiv.org/abs/1907.10072)
-- **Local PDF**: `resources/ga_flux_vacua_1907.10072.pdf`
+- **Local PDF**: [[research/papers/ga_flux_vacua_1907.10072.pdf]]
 - **Used for**: Genetic algorithm approach to searching flux landscape
 
 ### Conifold Vacua
 - **arXiv**: [2009.03312](https://arxiv.org/abs/2009.03312)
-- **Local PDF**: `resources/conifold_vacua_2009.03312.pdf`
+- **Local PDF**: [[research/papers/conifold_vacua_2009.03312.pdf]]
 
 ---
 
@@ -116,7 +118,7 @@ This document tracks all papers, databases, and tools used in this project. **Al
 ## Cosmological Parameters
 
 ### Particle Data Group - Cosmological Parameters
-- **Local PDF**: `resources/rpp2024-rev-cosmological-parameters.pdf`
+- **Local PDF**: [[research/papers/rpp2024-rev-cosmological-parameters.pdf]]
 - **Used for**: Current observational values of cosmological constant
 
 ---
@@ -124,7 +126,7 @@ This document tracks all papers, databases, and tools used in this project. **Al
 ## Other References
 
 ### 1807.06209v4
-- **Local PDF**: `resources/1807.06209v4.pdf`
+- **Local PDF**: [[research/papers/1807.06209v4.pdf]]
 - **TODO**: Add description
 
 ---

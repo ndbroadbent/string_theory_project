@@ -87,7 +87,7 @@ genome = {
 }
 ```
 
-See [docs/ORIENTIFOLD_INVOLUTION.md](ORIENTIFOLD_INVOLUTION.md) for full details.
+See [[ORIENTIFOLD_INVOLUTION.md|docs/ORIENTIFOLD_INVOLUTION.md]] for full details.
 
 ---
 

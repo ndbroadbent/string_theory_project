@@ -17,3 +17,7 @@ The following papers are cited in our documentation but missing from the `resear
 - [x] **Kinetically Mixed Axion-Dilaton Quintessence** (KMIX)
     - ID: `arXiv:2511.23463`
     - Status: **FOUND** (PDF in research/papers/)
+
+## Related Documentation
+- [[research/COSMOLOGICAL_CONSTANT.md|Cosmological Constant and DESI Measurements]]
+- [[research/QUINTESSENCE_MODULE_DESIGN.md|Quintessence Module Implementation Design]]

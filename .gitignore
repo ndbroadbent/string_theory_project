@@ -11,3 +11,4 @@ __pycache__/
 # Environment variables
 node_modules/
 mise.local.toml
+research/papers/cytools_paper_source/

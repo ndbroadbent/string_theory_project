@@ -167,3 +167,8 @@ Conversion:
 1 Mpc = 3.08567758149 × 10²² m
 H₀ = 67.64 km/s/Mpc = 2.190 × 10⁻¹⁸ s⁻¹
 ```
+
+## Related Documentation
+- [[project_docs/FORMULAS.md|Physics Formulas (Section 8: Quintessence)]]
+- [[research/QUINTESSENCE_MODULE_DESIGN.md|Quintessence Module Implementation Design]]
+- [[research/papers/MISSING.md|Missing Research Papers (DESI / Dark Energy Tracker)]]

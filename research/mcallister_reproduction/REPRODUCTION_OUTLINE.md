@@ -435,3 +435,7 @@ This search is what makes the problem hard in general. For reproduction, we use 
   - Section 6.4: Polytope 4-214-647 details
 - Demirtas et al., arXiv:1912.10047: Flat direction lemma
 - BBHL: Becker-Becker-Haack-Louis α' correction
+
+## Related Documentation
+- [[project_docs/FORMULAS.md|Physics Formulas and Reference]]
+- [[research/CITATIONS.md|Project Citations and References]]

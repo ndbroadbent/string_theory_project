@@ -56,3 +56,8 @@ graph TD
 
 ### Physics Bridge (Legacy)
 See `project_docs/PYTHON_BRIDGE.md` for details on the current implementation.
+
+## Related Documentation
+- [[project_docs/PYTHON_BRIDGE.md|Python Bridge Implementation]]
+- [[project_docs/FORMAL_VERIFICATION.md|Formal Verification Strategy]]
+- [[project_docs/PROJECT_PHILOSOPHY.md|Project Philosophy and Directives]]

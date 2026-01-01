@@ -705,7 +705,7 @@ See **docs/TORIC_GEOMETRY.md** for comprehensive documentation on:
 ## Part 8: Quintessence & Time-Varying Dark Energy (NEW - DESI 2024/2025)
 
 **CRITICAL UPDATE:** Recent DESI results suggest dark energy may NOT be a cosmological constant.
-See `research/DESI_DARK_ENERGY_IMPLICATIONS.md` for full analysis.
+See [[research/COSMOLOGICAL_CONSTANT.md|Cosmological Constant and DESI Measurements]] for observational details, and our [[research/QUINTESSENCE_MODULE_DESIGN.md|quintessence implementation design]] for the full software architecture.
 
 ### 8.1 The DESI Result
 
@@ -865,3 +865,8 @@ Periods require either:
 Without periods, our W₀ is fake → our V₀ is fake → our entire GA is optimizing garbage.
 
 **Next step:** Find or implement Picard-Fuchs solver for toric CY hypersurfaces.
+
+## Related Documentation
+- [[project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md|CYTools Algorithm Specifications]]
+- [[research/mcallister_reproduction/REPRODUCTION_OUTLINE.md|McAllister Reproduction Status]]
+- [[research/CITATIONS.md|Project Citations and References]]

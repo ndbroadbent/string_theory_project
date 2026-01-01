@@ -47,3 +47,7 @@ Start with `intersection.rs` as it's the foundation:
 1. Prove `canonical_key` is idempotent and symmetric.
 2. Prove `symmetry_multiplicity` correctly counts permutations.
 3. Prove `contract_triple` equals the explicit sum over all (i,j,k).
+
+## Related Documentation
+- [[project_docs/FORMULAS.md|Physics Formulas (KKLT, Racetrack)]]
+- [[project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md|CYTools Algorithms Specification]]
