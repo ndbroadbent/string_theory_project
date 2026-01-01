@@ -1,0 +1,6 @@
+---
+all:
+  hosts:
+    string_theory:
+      ansible_host: 10.5.7.33
+      ansible_user: root
