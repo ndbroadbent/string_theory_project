@@ -7,8 +7,8 @@ This document provides high-level mathematical and algorithmic descriptions of t
 The intersection numbers of a Calabi-Yau hypersurface $X$ in a toric variety $V$ are topological invariants defined by the triple intersection of divisors.
 
 ### Mathematical Definition
-For a basis of divisors {D_a}, the intersection numbers are:
-$$ \kappa_{abc} = \int_X D_a \wedge D_b \wedge D_c $$
+For a basis of divisors {D_a}, the intersection numbers are (Demirtas et al. 2022, Eq. 3.1):
+$$ \kappa_{abc} = \int_X D_a \wedge D_b \wedge D_c = \# D^a \cap D^b \cap D^c $$
 In the ambient toric variety $V$, this relates to intersection numbers involving the anti-canonical divisor $-K_V = [X]$:
 $$ \kappa_{abc} = \int_V D_a \wedge D_b \wedge D_c \wedge [X] $$
 
@@ -27,7 +27,7 @@ The computation leverages the linear relations among divisors in the toric varie
     where $v_i$ are the primitive lattice vectors of the rays. If the variety is smooth, this determinant is 1.
 
 3.  **Linear Relations**:
-The divisors satisfy linear equivalence relations given by the GLSM charge matrix $Q$:
+    The divisors satisfy linear equivalence relations given by the GLSM charge matrix $Q$ (Demirtas et al. 2022, Sec. 3.1):
     $$ \sum_{i} Q_i^a D_i \sim 0 \quad \text{for each } a = 1, \dots, h^{1,1} $$
     where indices $i$ run over all rays/points.
 
@@ -44,12 +44,12 @@ The divisors satisfy linear equivalence relations given by the GLSM charge matri
         The remaining terms are the unknowns ($x$).
 
 5.  **Solving**:
-The system is typically overdetermined. It can be solved using least squares or sparse linear algebra (e.g., Cholesky decomposition if formulated as $M^T M x = M^T C$).
+    The system is typically overdetermined. It can be solved using least squares or sparse linear algebra (e.g., Cholesky decomposition if formulated as $M^T M x = M^T C$).
     For exact arithmetic, use a rational number solver.
 
 ## 2. GLSM Charge Matrix ($Q$)
 
-The GLSM charge matrix describes the linear relations among the toric divisors.
+The GLSM charge matrix describes the linear relations among the toric divisors (Demirtas et al. 2022, Sec. 3.1, Sec. 5.3).
 
 ### Algorithm Description
 1.  **Inputs**:
@@ -57,7 +57,7 @@ The GLSM charge matrix describes the linear relations among the toric divisors.
     *   **Homogeneity**: Include a row of 1s to enforce the Calabi-Yau condition (sum of charges = 0) if treating as a projective variety. Let $\tilde{P}$ be the augmented matrix.
 
 2.  **Kernel Computation**:
-The charge matrix $Q$ is a basis for the left null space (kernel) of $\tilde{P}$:
+    The charge matrix $Q$ is a basis for the left null space (kernel) of $\tilde{P}$:
     $$ Q \cdot \tilde{P}^T = 0 $$
     Dimension of $Q$: $(N - d - 1) \times N$, where $N$ is the number of points and $d$ is the lattice dimension.
 
@@ -92,7 +92,7 @@ Gopakumar-Vafa (GV) invariants $n_q$ count BPS states (curves) of degree $q$. Th
 
 ## 4. Triangulation (FRST)
 
-A Fine, Regular, Star Triangulation (FRST) of a reflexive polytope defines a smooth Calabi-Yau hypersurface.
+A Fine, Regular, Star Triangulation (FRST) of a reflexive polytope defines a smooth Calabi-Yau hypersurface (Demirtas et al. 2022, Sec. 3.2).
 
 ### Definitions
 *   **Fine**: Uses all relevant lattice points (all points not interior to facets, or all points in the polytope). No lattice points lie in the interior of simplices.
@@ -118,12 +118,12 @@ A Fine, Regular, Star Triangulation (FRST) of a reflexive polytope defines a smo
 
 ## 5. Kähler Cone / Secondary Cone
 
-The Kähler cone of the Calabi-Yau $X$ is the dual of the Mori cone (cone of effective curves). In the context of GLSM/Toric geometry, it is identified with the phase of the Secondary Fan containing the triangulation.
+The Kähler cone of the Calabi-Yau $X$ is the dual of the Mori cone (cone of effective curves). In the context of GLSM/Toric geometry, it is identified with the phase of the Secondary Fan containing the triangulation (Demirtas et al. 2022, Sec. 5.4.1).
 
 ### Algorithm
 1.  **Secondary Cone Definition**:
-The region in height space $\mathbb{R}^{|S|}$ where the induced triangulation remains unchanged.
-    Defined by hyperplanes corresponding to "flips" or "walls" between adjacent triangulations.
+    The region in height space $\mathbb{R}^{|S|}$ where the induced triangulation remains unchanged.
+    Defined by hyperplanes corresponding to "flips" or "walls" between adjacent triangulations (Demirtas et al. 2022, Sec. 5.4.1).
 
 2.  **Wall Computation (BKK Algorithm / Native)**:
     *   Iterate over all pairs of adjacent simplices $(s_1, s_2)$ in the triangulation (sharing a facet).
@@ -137,7 +137,7 @@ The region in height space $\mathbb{R}^{|S|}$ where the induced triangulation re
 3.  **Kähler Cone**:
     *   The Secondary Cone is in height space.
     *   The Kähler cone parameters $t$ are related to heights (roughly dual/linear transform).
-    *   For practical purposes in CYTools, the **Mori Cone** is computed first, then dualized.
+    *   For practical purposes in CYTools, the **Mori Cone** is computed first, then dualized (Demirtas et al. 2022, Sec. 5.4.2).
 
 4.  **Mori Cone via Intersection Numbers**:
     *   Alternatively, the Mori cone generators (curves) can be found by intersecting divisors.
@@ -145,7 +145,7 @@ The region in height space $\mathbb{R}^{|S|}$ where the induced triangulation re
 
 ## 6. Divisor Basis Selection
 
-We need a linearly independent basis of divisors $D_1, \dots, D_{h^{1,1}}$ to express the Kähler form $J = \sum t^a D_a$.
+We need a linearly independent basis of divisors $D_1, \dots, D_{h^{1,1}}$ to express the Kähler form $J = \sum t^a D_a$ (Demirtas et al. 2022, Sec. 3.1).
 
 ### Algorithm
 1.  **Input**: Set of prime toric divisors (points on the boundary of the polytope).
