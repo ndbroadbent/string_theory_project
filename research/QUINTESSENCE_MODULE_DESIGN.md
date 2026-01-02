@@ -657,4 +657,5 @@ def test_desi_targets():
 ## Related Documentation
 - [[project_docs/FORMULAS.md|Physics Formulas (Section 8: Quintessence)]]
 - [[research/COSMOLOGICAL_CONSTANT.md|Cosmological Constant and DESI Measurements]]
+- [[project_docs/SCALPY_ALGORITHMS_CLEAN_ROOM.md|ScalPy Algorithm Specifications (Cosmology Solver)]]
 - [[research/papers/MISSING.md|Tracking Missing DESI/Quintessence Papers]]

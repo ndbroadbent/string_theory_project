@@ -868,5 +868,6 @@ Without periods, our W₀ is fake → our V₀ is fake → our entire GA is opti
 
 ## Related Documentation
 - [[project_docs/CYTOOLS_ALGORITHMS_CLEAN_ROOM.md|CYTools Algorithm Specifications]]
+- [[project_docs/SCALPY_ALGORITHMS_CLEAN_ROOM.md|ScalPy Algorithm Specifications (Cosmology Solver)]]
 - [[research/mcallister_reproduction/REPRODUCTION_OUTLINE.md|McAllister Reproduction Status]]
 - [[research/CITATIONS.md|Project Citations and References]]
