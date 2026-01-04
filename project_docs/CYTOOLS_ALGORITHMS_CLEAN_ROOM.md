@@ -6,6 +6,7 @@ This index lists the high-level mathematical and algorithmic descriptions of the
 
 ### Geometry & Topology
 - [[project_docs/clean_room/INTERSECTION_NUMBERS.md|Intersection Number Computation (\kappa_{ijk})]]
+- [[project_docs/clean_room/INTERSECTION_TRANSFORMATION.md|Intersection Transformation & Origin Handling]]
 - [[project_docs/clean_room/GLSM_CHARGE_MATRIX.md|GLSM Charge Matrix ($Q$)]]
 - [[project_docs/clean_room/TRIANGULATION.md|Triangulation (FRST)]]
 - [[project_docs/clean_room/DEFAULT_HEIGHTS.md|Default Triangulation Heights]]
