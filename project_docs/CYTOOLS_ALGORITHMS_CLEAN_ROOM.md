@@ -156,3 +156,29 @@ We need a linearly independent basis of divisors $D_1, \dots, D_{h^{1,1}}$ to ex
 3.  **Procedure**:
     *   Often involves computing the Smith Normal Form (SNF) of the charge matrix or points matrix.
     *   Select indices that form a basis for the free part of the group of divisors modulo linear equivalence.
+
+## 7. Dual Polytope Computation
+
+The dual (polar) polytope $\Delta^\circ$ of a reflexive polytope $\Delta$ is defined by the set of inequalities derived from the vertices of $\Delta$.
+
+### Algorithm
+1.  **Input**: Lattice points of the primal polytope $P$.
+2.  **Convex Hull**: Compute the H-representation (inequalities) of the convex hull of $P$.
+    The inequalities are of the form $m \cdot x + c \ge 0$.
+3.  **Normalization**: For a reflexive polytope, the constant term $c$ can always be normalized to 1 (Demirtas et al. 2022, Sec. 3.1).
+    $$ m \cdot x \ge -1 $$
+4.  **Dual Vertices**: The vectors $m$ from the normalized inequalities form the vertices of the dual polytope $P^*$.
+
+## 8. Default Triangulation Heights
+
+When no specific triangulation is requested, CYTools produces a "canonical" Fine Regular Star Triangulation (FRST) using a deterministic height function (Demirtas et al. 2022, Sec. 3.2).
+
+### Algorithm
+1.  **Initial Heights**: Assign the squared Euclidean norm (Delaunay heights) to each point $p$:
+    $$ h(p) = |p|^2 = p \cdot p $$
+2.  **Regular Triangulation**: Compute the regular triangulation induced by these heights (projection of the lower convex hull of lifted points).
+3.  **Star Property Check**: Verify if the origin is a vertex of every simplex in the resulting triangulation.
+4.  **Star Adjustment (if needed)**:
+    If the origin is not in every simplex (i.e., not Star), decrease the height of the origin significantly to force it to be "lower" than all other points in the lifted space.
+    $$ h(0) \leftarrow h(0) - (\max(h) - \min(h) + 10) $$
+    Repeat the triangulation and check until the Star property is satisfied.
