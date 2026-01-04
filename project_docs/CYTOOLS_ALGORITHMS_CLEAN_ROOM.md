@@ -10,6 +10,7 @@ This index lists the high-level mathematical and algorithmic descriptions of the
 - [[project_docs/clean_room/TRIANGULATION.md|Triangulation (FRST)]]
 - [[project_docs/clean_room/DEFAULT_HEIGHTS.md|Default Triangulation Heights]]
 - [[project_docs/clean_room/DUAL_POLYTOPE.md|Dual Polytope Computation]]
+- [[project_docs/clean_room/HEIGHTS_MODULI_MAPPING.md|Heights ↔ Kähler Moduli Mapping]]
 
 ### Invariants & Moduli
 - [[project_docs/clean_room/GV_INVARIANTS.md|GV Invariant Computation (HKTY Procedure)]]
