@@ -31,14 +31,22 @@ The computation leverages the linear relations among divisors in the toric varie
     We want to find all intersection numbers, including self-intersections (e.g., $D_1^3$).
     We can generate a system of linear equations $M x = C$:
     *   **Variables ($x$)**: The unknown intersection numbers.
+        *   **Optimization (Variable Pruning)**: Do NOT enumerate all possible tuples. Only enumerate intersection numbers corresponding to:
+            1.  Faces of simplices in the triangulation (dimension $\ge 2$).
+            2.  Self-intersections required for consistency.
+            Most intersection numbers are trivially zero if the divisors do not share a cone in the fan.
     *   **Relations**: Multiply the linear relation $\sum Q_i^a D_i = 0$ by any product of $n-1$ divisors $P = D_{j_1} \dots D_{j_{n-1}}$:
         $$ \sum_i Q_i^a (D_i \cdot P) = 0 $$
         This gives a linear equation relating different intersection numbers.
     *   **System Construction**:
-        Iterate over all possible combinations of $n-1$ divisors to form the "probes" $P$.
+        Iterate over all possible combinations of $n-1$ divisors (from the pruned set) to form the "probes" $P$.
         Use the "Distinct Intersection" rule (Step 2) to fill in the known values (constant term $C$).
         The remaining terms are the unknowns ($x$).
+        **CRITICAL**: The matrix $M$ is extremely sparse. It must be constructed using a sparse format (e.g., CSR).
 
 5.  **Solving**:
-    The system is typically overdetermined. It can be solved using least squares or sparse linear algebra (e.g., Cholesky decomposition if formulated as $M^T M x = M^T C$).
-    For exact arithmetic, use a rational number solver.
+    The system is typically overdetermined ($M x = -C$).
+    *   **Method**: Solve the normal equations $M^T M x = M^T (-C)$.
+    *   **Algorithm**: Use a sparse linear solver. Cholesky decomposition of $M^T M$ (which is symmetric positive definite) is the standard high-performance approach.
+    *   **Rust Recommendation**: Use the **`faer`** crate (specifically `faer::sparse`). It provides high-performance sparse LU and Cholesky solvers and is already included in the project dependencies.
+    *   **Exactness**: For the final result, rational reconstruction can be used, or perform the solve in exact rational arithmetic if the sparse solver supports it (though performance will suffer). CYTools uses float64 with Cholesky for speed, then rounds/reconstructs.

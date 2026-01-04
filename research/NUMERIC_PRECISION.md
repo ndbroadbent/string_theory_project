@@ -1,4 +1,54 @@
-# Numeric Precision in String Theory Computations
+# Numeric Precision in Geometric Algorithms
+
+## The Golden Rule: Exactness at Decision Boundaries
+
+**Use exact arithmetic for topological / combinatorial decisions where a single wrong sign flips the outcome.**
+
+### Critical Decision Points (Must be Exact)
+* **Orientation tests**: Sign of determinant (left/right/collinear).
+* **Visibility**: "Is this facet visible?" / "Is point above plane?"
+* **Simplex validity**: Inside/outside tests.
+* **Degeneracy handling**: Detecting collinear or coplanar points.
+
+If floats get one of these wrong, you get a totally different hull or triangulation, which is a catastrophic failure, not an approximation error.
+
+### Safe Zones for Floats
+Floats are acceptable for **purely numeric outputs** where small errors are tolerable and **no branching** occurs based on near-zero comparisons:
+* Computing approximate volumes *after* combinatorics are fixed.
+* Reporting results to the user.
+* Performance-heavy linear algebra (if well-conditioned).
+
+## The 3-Tier Strategy
+
+1.  **Exact Integers (Best)**
+    *   Inputs: Lattice points and integer heights.
+    *   Operation: Determinants and cross-products are integers.
+    *   **CRITICAL (Rust)**: Avoid `i64` for intermediate matrix steps. In Rust, `i64` overflows panic in debug but **silently wrap** in release, causing incorrect geometric decisions.
+    *   **Requirement**: Use `malachite::Integer` for infinite precision. Algorithms like HNF or Gaussian elimination produce intermediate values that easily exceed $2^{63}-1$ for large matrices ($h^{1,1}=214$).
+    *   Algorithm: Bareiss algorithm for fraction-free exact determinants.
+
+2.  **Exact Rationals (Correct but Heavy)**
+    *   Inputs: Rational heights or coordinates.
+    *   Operation: Exact division required.
+    *   Downside: Numerators/denominators grow exponentially.
+
+3.  **Robust Float Predicates (Engineering Tradeoff)**
+    *   Inputs: Floats.
+    *   Operation: Adaptive exact predicates (e.g., Shewchuk's predicates).
+    *   Logic: Compute in float -> check error bound -> if ambiguous, fall back to exact expansion.
+
+## Implementation Directives
+
+### 1. Heights Must Be Exact
+The current pipeline `heights: &[f64]` is an anti-pattern.
+*   **Change**: Represent heights as `i64` (random small integers) or `Rational`.
+*   **Reason**: Heights determine the triangulation. Floating point noise can create impossible geometries or non-deterministic triangulations.
+
+### 2. Hull & Triangulation
+*   Use **exact integer determinants** for all "which face is lower" checks.
+*   Only use floats for post-processing volume calculations.
+
+
 
 ## Overview
 

@@ -48,3 +48,14 @@ We link them via symlinks (`project/` in code repos points here), so you can ref
 - **Formal Proof**: If a property is critical, verify it with Aeneas.
 - **Reproducibility**: Results must match published literature exactly.
 - **Source Integrity**: Prefer `.tex` sources for papers. PDF-to-text conversion is a last resort, as it can corrupt mathematical formulas.
+
+## Engineering Standards
+
+### 1. Exactness at Decision Boundaries
+**Floating point is forbidden for geometric decision making.**
+- Orientation tests (sign of determinant), convex hull visibility, and triangulation flips must use **exact arithmetic** (Integers or Rationals).
+- A wrong sign in a determinant doesn't just mean a small error; it changes the topology of the manifold.
+- **Rule**: Heights and lattice points are Integers. Determinants are Integers.
+
+### 2. The "No Cheating" Rule
+We do not hardcode constants from papers unless they are universal constants (like $\pi$ or $\zeta(3)$). Every derived value (e.g., $W_0$, $g_s$) must be computed from first principles within the pipeline.

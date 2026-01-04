@@ -1,0 +1,30 @@
+There are five folders containing the data for each of the examples described in the paper. Each folder contains the following files.
+
+- basis.dat: Contains the indices of the prime toric divisors that are used as a basis of divisors. Importantly, this is different from the basis of prime toric divisors that contribute to the superpotential.
+- corrected_cy_vol.dat: Contains the vev of $\mathcal{V}^{[0]}$ in the KKLT vacuum.
+- corrected_heights.dat: Contains the heights that give the Kahler parameters in the KKLT vacuum.
+- corrected_kahler_param.dat: Contains the Kahler parameters in the KKLT vacuum.
+- corrected_target_volumes.dat: Contains the classical string-frame volumes of the divisors contributing to the superpotential, in the KKLT vacuum.
+- c_tau.dat: Contains the value of $c_\tau$ for the flux vacuum.
+- cy_vol: Contains the classical volume of the Calabi-Yau three-fold in the approximate KKLT vacuum (found by solving the F-term conditions while ignoring instanton and perturbative corrections).
+- dual_curves.dat: Contains the lowest degree curves in the Mori cone of the mirror Calabi-Yau. Note: They are given as h21+5-dimensional vectors with the entries corresponding to the intersection numbers with the canonical and prime toric divisors.
+- dual_curves_gv.dat: Contains the Gopakumar-Vafa invariants of the curves in dual_curves.dat.
+- dual_points.dat: Contains the lattice points of $\Delta$.
+- dual_simplices.dat: Contains the simplices of the triangulation of $\Delta$.
+- g_s.dat: Contains the value of the string coupling $g_s$ in the KKLT vacuum.
+- heights.dat: Contains the heights that give the Kahler parameters in the approximate KKLT vacuum.
+- kahler_param.dat: Contains the Kahler parameters in the approximate KKLT vacuum.
+- kklt_basis.dat: Contains the indices of the prime toric divisors that contribute to the superpotential.
+- K_vec.dat: Contains the flux vector K.
+- M_vec.dat: Contains the flux vector M.
+- points.dat: Contains the lattice points of $\Delta^\circ$.
+- potent_rays.dat: Contains the set of potent rays we have found. They are given as h11+5-dimensional vectors (see note in dual_curves.dat).
+- potent_rays_gv.dat: Contains the first ten Gopakumar-Vafa invariants of the rays in potent_rays.dat.
+- potent_rays_rank.dat: Contains the rank of the cone spanned by the rays in potent_rays.dat.
+- potent_rays_vols.dat: Contains the volumes of the curves in potent_rays.dat in the KKLT vacuum.
+- small_curves.dat: Contains the curves we found using toric information below the cutoff volume in the approximate KKLT vacuum.
+- small_curves_cutoff: Contains the volume cutoff for the curves in small_curves.dat. Note: This volume cut is done before instanton corrections are considered.
+- small_curves_gv.dat: Contains the Gopakumar-Vafa invariants of the curves in small_rays.dat.
+- small_curves_vols.dat: Contains the volumes of the curves in small_rays.dat in the KKLT vacuum. Note: There are some negative volumes, which indicates that these curves are flopped upon moving from the Kahler parameters in kahler_param.dat to the ones of corrected_kahler_param.dat corresponding to the actual KKLT vacuum.
+- target_volumes.dat: Contains the dual Coxeter numbers for the divisors contributing to the superpotential (or one for divisors hosting euclidean D3 brane instantons).
+- W_0.dat: Contains the magnitude of $W_0$ in the flux vacuum.
