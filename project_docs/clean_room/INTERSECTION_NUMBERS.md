@@ -20,7 +20,8 @@ The computation leverages the linear relations among divisors in the toric varie
     For a simplical toric variety, the intersection of $n$ distinct divisors $D_{i_1}, \dots, D_{i_n}$ (where $n = \dim(V)$) is non-zero if and only if the corresponding rays generate a cone in the fan (i.e., form a simplex in the triangulation).
     The value is:
     $$ D_{i_1} \cdot \dots \cdot D_{i_n} = \frac{1}{|\det(v_{i_1}, \dots, v_{i_n})|} $$
-    where $v_i$ are the primitive lattice vectors of the rays. If the variety is smooth, this determinant is 1.
+    where $v_i$ are the primitive lattice vectors of the rays (homogenized with a component of 1).
+    **Note**: For singular varieties, this determinant may be $>1$, leading to fractional intersection numbers on the ambient variety. These are valid and necessary for the computation.
 
 3.  **Linear Relations**:
     The divisors satisfy linear equivalence relations given by the GLSM charge matrix $Q$ (Demirtas et al. 2022, Sec. 3.1):
@@ -31,10 +32,8 @@ The computation leverages the linear relations among divisors in the toric varie
     We want to find all intersection numbers, including self-intersections (e.g., $D_1^3$).
     We can generate a system of linear equations $M x = C$:
     *   **Variables ($x$)**: The unknown intersection numbers.
-        *   **Optimization (Variable Pruning)**: Do NOT enumerate all possible tuples. Only enumerate intersection numbers corresponding to:
-            1.  Faces of simplices in the triangulation (dimension $\ge 2$).
-            2.  Self-intersections required for consistency.
-            Most intersection numbers are trivially zero if the divisors do not share a cone in the fan.
+        *   **Optimization (Variable Pruning)**: The variables are *only* the intersection numbers with repeating indices (self-intersections). The distinct intersection numbers are already known (from Step 2) and are treated as constants.
+        *   Specifically, enumerate tuples corresponding to faces of simplices where indices repeat (e.g., $\{a, a, b, c\}$, $\{a, a, b, b\}$, $\{a, a, a, a\}$).
     *   **Relations**: Multiply the linear relation $\sum Q_i^a D_i = 0$ by any product of $n-1$ divisors $P = D_{j_1} \dots D_{j_{n-1}}$:
         $$ \sum_i Q_i^a (D_i \cdot P) = 0 $$
         This gives a linear equation relating different intersection numbers.
