@@ -33,19 +33,21 @@ The computation leverages the linear relations among divisors in the toric varie
     We can generate a system of linear equations $M x = C$:
     *   **Variables ($x$)**: The unknown intersection numbers.
         *   **Optimization (Variable Pruning)**: The variables are *only* the intersection numbers with repeating indices (self-intersections). The distinct intersection numbers are already known (from Step 2) and are treated as constants.
-        *   Specifically, enumerate tuples corresponding to faces of simplices where indices repeat (e.g., $\{a, a, b, c\}$, $\{a, a, b, b\}$, $\{a, a, a, a\}$).
-    *   **Relations**: Multiply the linear relation $\sum Q_i^a D_i = 0$ by any product of $n-1$ divisors $P = D_{j_1} \dots D_{j_{n-1}}$:
-        $$ \sum_i Q_i^a (D_i \cdot P) = 0 $$
+        *   **Origin Exclusion**: The origin (index 0) is explicitly excluded from all variables and equations. The linear system is built only for indices $\{1, \dots, N\}$.
+        *   Specifically, enumerate tuples corresponding to faces of simplices where indices repeat (e.g., $\{a, a, b, c\}$, $\{a, a, b, b\}$, $\{a, a, a, a\}$) and $a,b,c \ne 0$.
+    *   **Relations**: Use the linear relations *excluding the origin* ($Q$ matrix without the origin column).
+        $$ \sum_{i=1}^N Q_i^a (D_i \cdot P) = 0 $$
         This gives a linear equation relating different intersection numbers.
     *   **System Construction**:
-        Iterate over all possible combinations of $n-1$ divisors (from the pruned set) to form the "probes" $P$.
+        Iterate over all possible combinations of $n-1$ divisors (from the pruned set, excluding origin) to form the "probes" $P$.
         Use the "Distinct Intersection" rule (Step 2) to fill in the known values (constant term $C$).
         The remaining terms are the unknowns ($x$).
         **CRITICAL**: The matrix $M$ is extremely sparse. It must be constructed using a sparse format (e.g., CSR).
+    *   **Ghost Equations**: It is common to encounter equations where all variable coefficients are zero (LHS = 0) but the constant term is non-zero (RHS $\ne 0$). This occurs when a probe relates only known distinct intersection numbers in a way that is algebraically inconsistent due to the fractional nature of the singular variety. **This is expected behavior.** These equations do not constrain the variables; they only increase the residual of the Least Squares fit.
 
 5.  **Solving**:
-    The system is typically overdetermined ($M x = -C$).
-    *   **Method**: Solve the normal equations $M^T M x = M^T (-C)$.
+    The system is typically overdetermined ($M x = -C$) and may appear inconsistent due to the fractional nature of intersection numbers on singular varieties.
+    *   **Method**: Solve the normal equations $M^T M x = M^T (-C)$. This effectively performs a **Least Squares** solution, which is robust to these inconsistencies.
     *   **Algorithm**: Use a sparse linear solver. Cholesky decomposition of $M^T M$ (which is symmetric positive definite) is the standard high-performance approach.
     *   **Rust Recommendation**: Use the **`faer`** crate (specifically `faer::sparse`). It provides high-performance sparse LU and Cholesky solvers and is already included in the project dependencies.
     *   **Exactness**: For the final result, rational reconstruction can be used, or perform the solve in exact rational arithmetic if the sparse solver supports it (though performance will suffer). CYTools uses float64 with Cholesky for speed, then rounds/reconstructs.
