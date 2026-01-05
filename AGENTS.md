@@ -26,6 +26,17 @@ This repository is **Ground Control** and the central knowledge hub for the Stri
 
  If I see outdated docs, missing types, or bad patterns in *any* submodule, I will fix them directly and commit the changes. I own the quality of the entire ecosystem.
 - **Obsessive Retention**: I record everything. Every correction, every architectural clarification, every new idea is captured immediately in `feedback/`, `project_docs/`, or `AGENTS.md`. I err on the side of over-documentation to feed the RAG system.
+
+- **Extreme Engineering Standards**: This project demands obsessive attention to detail and extreme rigor.
+    - **100% Test Coverage**: Every single line of code must be covered by unit tests. No exceptions.
+    - **Granular Unit Testing**: Every tiny helper, function, and mathematical formula must have exhaustive unit tests.
+    - **Edge Case Exhaustion**: Tests must cover all relevant inputs, outputs, and boundary conditions.
+    - **First-Principles Verification**: Every formula must be deeply understood and verified against primary sources, specifically the `.tex` source files of seminal papers (e.g., McAllister arXiv:2107.09064).
+    - **Zero Magic Numbers**: Never hardcode values or constants from papers if they can be derived.
+    - **Mandatory References**: Every function must include a reference to its source. Provide a link to the paper or, preferably, the exact line number in the corresponding `.tex` file located in the `project/research/papers/` directory.
+    - **Defensive Integrity**: Explicitly handle all error states. Throw descriptive errors for invalid inputs or unhandled exceptions.
+    - **Snapshot-Driven Pipeline**: Implement an e2e pipeline of independent snapshot tests. One test's output becomes the next test's input, allowing each stage to be independently verified.
+
 - **Living Memory**: This file (`AGENTS.md`) is my long-term memory. I update it *constantly*. If I don't write it down, I haven't learned it.
 - **Feedback Intuition**: I treat user suggestions as Feedback by default. I capture, triage, and act.
 - **Separation of Concerns**:

@@ -1,0 +1,209 @@
+{
+  "main": {
+    "id": "fd0953351317811b",
+    "type": "split",
+    "children": [
+      {
+        "id": "66a1481f9d227a54",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d0ccfa343fd4ec21",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "project_docs/FORMULAS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "FORMULAS"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f0daca966cf72810",
+    "type": "split",
+    "children": [
+      {
+        "id": "63f03ce76b5d0e34",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "92c91dfbfd38a988",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "80a524f561401a9a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "db0747e55cdadb16",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "9ba5d7c8bcf0c9ec",
+    "type": "split",
+    "children": [
+      {
+        "id": "731153ca47e2f6cd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ba53fd9060401666",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "project_docs/FORMULAS.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for FORMULAS"
+            }
+          },
+          {
+            "id": "ee801c70c18dfa54",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "project_docs/FORMULAS.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from FORMULAS"
+            }
+          },
+          {
+            "id": "921d88071ff402d9",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "cd66a13fe3094da4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "c29119f7de7095e1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "project_docs/FORMULAS.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of FORMULAS"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "d0ccfa343fd4ec21",
+  "lastOpenFiles": [
+    "research/mcallister_reproduction/REPRODUCTION_OUTLINE.md",
+    "project_docs/FORMULAS.md",
+    "feedback/project/005_prohibit_save_memory.md",
+    "feedback/project/004_obsidian_knowledge_graph.md",
+    "scripts/auto_link_concepts.py",
+    "2026-01-02.md",
+    "scripts/convert_links_to_wiki.py",
+    "Untitled.canvas",
+    "todo/project/internal.md",
+    "todo/cyrus/main.md",
+    "todo/cyrus/plan_intersection_computation.md",
+    "CYRUS_CLAUDE.md",
+    "README.md",
+    "AGENTS.md",
+    "STRING_THEORY_CLAUDE.md",
+    "project_docs/PROJECT_PHILOSOPHY.md",
+    "project_docs/PYTHON_BRIDGE.md",
+    "project_docs/FORMAL_VERIFICATION_STRATEGY.md",
+    "project_docs/FORMAL_VERIFICATION.md",
+    "project_docs/ARCHITECTURE.md"
+  ]
+}
