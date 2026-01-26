@@ -1,37 +1,139 @@
 # Cyrus Project
 
-This repository is the home of **Cyrus**, a high-performance Rust toolkit for Calabi-Yau manifold computations.
+This repository is the home of **Cyrus**, a high-performance Rust toolkit for Calabi-Yau manifold computations focused on string landscape search and quintessence research.
+
+## Project Goal: Focused CY/Quintessence Pipeline
+
+**Cyrus is NOT a general-purpose math library. It's a focused tool for:**
+
+1. **Searching the string landscape** - GA optimization over flux vacua
+2. **Verifying McAllister results** - Reproduce arXiv:2107.09064 exactly
+3. **Quintessence research** - Compute cosmological observables from string theory
+
+We extract the specific algorithms we need from CYTools, PPL, SciPy, etc., and write comprehensive unit tests for each. We don't port entire libraries - we lift out exactly what's needed.
+
+### What We Need (and Don't Need)
+
+**NEED:**
+- Polytope points, dual polytopes, convex hull
+- Regular triangulations (FRST)
+- Intersection numbers κ_ijk
+- Kähler/Mori cone computations
+- Volume formulas (with BBHL correction)
+- GLSM charge matrix, divisor basis
+- GV invariants, curve enumeration
+- KKLT/LVS moduli stabilization
+- Racetrack superpotential
+- **Visualization of EVERYTHING** - PNGs, rotation animations, see every pipeline stage
+
+**VISUALIZATION IS CRITICAL:**
+- Polytopes (primal/dual) with rotation animations
+- Triangulations - see the simplicial decomposition
+- Kähler/Mori cones - visualize the cone structure
+- Racetrack potential landscapes
+- Parameter space that produces small CC
+- Every intermediate result should be visualizable
+
+The goal is to **SEE** what's happening at each stage, not just compute numbers.
+
+**DON'T NEED:**
+- Abstract toric variety theory beyond what's needed
+- Features CYTools has that we won't use
+- Compatibility with CYTools API
+
+### Why Rust?
+
+For exploring the vast string landscape (10^272,000 flux vacua), we need:
+
+1. **Performance** - Orders of magnitude faster than Python for GA inner loops
+2. **Confidence** - Type system prevents entire classes of physics errors
+3. **Parallelism** - Rayon for easy multi-threading across flux configurations
+4. **Formal Verification** - Critical formulas verified in Lean 4 via aeneas
+
+### Algebraic Type Safety
+
+Rust's type system prevents physics errors:
+- `F64<Pos>` - strictly positive (volumes, moduli)
+- `F64<NonZero>` - can't be zero (denominators)
+- `F64<NonNeg>` - non-negative (squared quantities)
+- `F64<Finite>` - no NaN, no ±∞
+
+Invalid states are **unrepresentable**. A NaN can't corrupt downstream calculations.
+
+### CYTools Reference Location
+```
+/Users/ndbroadbent/code/cyrus/reference/cytools/
+```
+
+This is the authoritative CYTools source for porting. Read it directly when implementing any functionality.
+
+### Key CYTools Files (Reference for Algorithms)
+
+We extract specific algorithms from these files - we don't port them wholesale:
+
+| Python File | What We Extract |
+|-------------|-----------------|
+| `src/cytools/polytope.py` | Points, dual polytope, convex hull, vertices |
+| `src/cytools/triangulation.py` | Regular triangulation, FRST, heights |
+| `src/cytools/calabiyau.py` | Intersection numbers, GLSM, volumes, Kähler cone |
+| `src/cytools/cone.py` | Cone dualization (DDM), extremal rays, tip finding |
+| `src/cytools/toricvariety.py` | Divisor basis, curve classes |
+| `src/cytools/utils.py` | Linear solve, GCD, LLL, nullspace |
+
+### Algorithm Extraction Standards
+
+1. **Identify the algorithm**: Find the specific function/method we need
+2. **Understand it completely**: Read every line, understand edge cases
+3. **Port to idiomatic Rust**: Not line-by-line translation, but same algorithm
+4. **Dual test suites**: Run same inputs through CYTools AND Rust, compare results
+5. **Add visualization**: Every major result should be visualizable
+6. **High code quality**: All code must pass `cargo clippy` with pedantic warnings
+
+### Dual Test Suites (CYTools ↔ Rust)
+
+**Now that we're GPL-3.0, we can run identical inputs through both CYTools and our Rust code.**
+
+```rust
+// Example dual test structure
+#[test]
+fn test_intersection_numbers_dual() {
+    let points = vec![...];  // Same input
+
+    // Run through CYTools (via PyO3 or subprocess)
+    let cytools_result = run_cytools_intersection(&points);
+
+    // Run through our Rust implementation
+    let rust_result = compute_intersection_numbers(&points);
+
+    // Must be IDENTICAL
+    assert_eq!(rust_result, cytools_result);
+}
+```
+
+**Benefits:**
+- Catch ANY divergence immediately
+- No need to manually create fixtures
+- Test on random/generated inputs
+- Confidence that our code matches CYTools exactly
+
+**Implementation options:**
+1. **PyO3**: Call CYTools directly from Rust tests
+2. **Subprocess**: Run Python script, compare JSON output
+3. **Shared fixtures**: Generate fixtures once, test both against them
+
+For performance-critical tests, generate fixtures once and cache them. For correctness tests, run both implementations live.
 
 ## Architecture
 - **Crates**:
-  - `cyrus-core`: Fundamental mathematics (polytopes, intersection numbers, volumes).
-  - `cyrus-moduli`: Moduli stabilization algorithms (KKLT, LVS).
+  - `cyrus-core`: Core CY computations (polytopes, triangulations, intersection numbers, volumes, cones).
+  - `cyrus-moduli`: Moduli stabilization (KKLT, LVS, racetrack).
   - `cyrus-cosmology`: Cosmological evolution (quintessence, Friedmann equations).
   - `cyrus-ga`: Genetic algorithms for landscape search.
+  - `cyrus-viz`: Visualization (polytope rendering, animations, potential landscapes).
 
 ## Documentation Index
 
 **STOP: Before requesting documentation, CHECK if it already exists below.**
-
-### Clean Room Implementation Specs
-Location: `project/project_docs/clean_room/` (symlinked from string_theory_project)
-
-| File | Topic |
-|------|-------|
-| `DIVISOR_BASIS.md` | How to compute divisor basis from GLSM (SNF/HNF algorithm) |
-| `INTERSECTION_NUMBERS.md` | κ_ijk computation (sparse linear system, Cholesky) |
-| `GLSM_CHARGE_MATRIX.md` | GLSM charge matrix construction |
-| `TRIANGULATION.md` | Regular triangulation algorithm |
-| `REGULAR_TRIANGULATION_LIFTING.md` | Lifting method for triangulations |
-| `DEFAULT_HEIGHTS.md` | FRST heights computation |
-| `DUAL_POLYTOPE.md` | Dual/polar polytope computation |
-| `REFLEXIVE_POLYTOPE_DUAL.md` | Reflexive polytope duality |
-| `CONVEX_HULL_VERTICES.md` | Convex hull algorithms |
-| `CONVEX_HULL_D.md` | D-dimensional convex hull |
-| `KAHLER_CONE.md` | Kähler cone computation |
-| `GV_INVARIANTS.md` | Gopakumar-Vafa invariants |
-| `HEIGHTS_MODULI_MAPPING.md` | Heights to moduli mapping |
-| `GEOMETRIC_PRIMITIVES.md` | Basic geometric operations |
 
 ### Physics & Formulas
 | Location | Topic |
@@ -75,15 +177,36 @@ Location: `project/project_docs/cyrus/`
 | `project/project_docs/FORMAL_VERIFICATION.md` | Verification approach |
 | `project/project_docs/FORMAL_VERIFICATION_STRATEGY.md` | Strategy details |
 
-### Python Prototype Reference
+### Test Fixture Generation
 Location: `/Users/ndbroadbent/code/string_theory/`
+
+Use Python scripts here to generate test fixtures by running CYTools and saving outputs:
 
 | Path | Purpose |
 |------|---------|
-| `mcallister_2107/full_pipeline_from_data.py` | Complete working pipeline |
+| `mcallister_2107/full_pipeline_from_data.py` | Complete working pipeline (generates validation data) |
 | `mcallister_2107/full_pipeline.py` | Alternative pipeline |
-| `mcallister_2107/CLAUDE.md` | McAllister context |
 | `FORMULAS.md` | Formula reference |
+
+**Generating fixtures:**
+```python
+# Example: Generate intersection number fixtures
+import json
+from cytools import Polytope
+
+p = Polytope([[...]])  # Your test polytope
+t = p.triangulate()
+cy = t.get_cy()
+
+# Save to JSON for Rust tests
+fixture = {
+    "intersection_numbers": cy.intersection_numbers(in_basis=True).tolist(),
+    "glsm_charge_matrix": cy.glsm_charge_matrix().tolist(),
+    # ... other outputs
+}
+with open("fixtures/intersection_test_1.json", "w") as f:
+    json.dump(fixture, f)
+```
 
 ### Data Files
 | Location | Contents |
@@ -157,78 +280,148 @@ All papers are at `/Users/ndbroadbent/code/string_theory_project/research/papers
 - Trust the compiler and LLVM to optimize safe code
 - If profiling shows a hot path, optimize with safe abstractions first
 
-## Clean Room Implementation Policy
+## Algorithm Sourcing Philosophy
 
-**When you need to implement functionality that exists in CYTools (GPL 3.0), request technical documentation from the user.**
+**Rust bindings don't matter. You can reimplement entire libraries in minutes.**
 
-CYTools is GPL-licensed. To keep Cyrus legally clean:
-1. You NEVER read the CYTools source code directly
-2. When you need to implement something (e.g., dual polytope computation, triangulation heights), ASK the user for technical documentation
-3. The user passes your request to another agent that reads the GPL source and writes a technical specification
-4. You implement from the specification only
+When you need an algorithm (like polyhedral cone computations, linear programming, convex hull), don't waste time searching for Rust crates with bindings. Instead:
 
-**How to request:**
-Simply ask: "I need technical documentation for clean room implementation of [X]"
+1. **Find the algorithm in ANY language** - C++, Python, Fortran, whatever
+2. **Read and understand the code** - understand the algorithm, not just the API
+3. **Port to idiomatic Rust** - translate the algorithm faithfully
+4. **Port only what you need** - you rarely need 100% of a library
 
-Examples:
-- "I need technical documentation for clean room implementation of dual polytope computation"
-- "I need technical documentation for clean room implementation of default triangulation heights"
-- "I need technical documentation for clean room implementation of GLSM charge matrix construction"
-- "I need technical documentation for how CYTools optimizes intersection number computation"
+### Reference Libraries Available
 
-The user will provide a specification document. Implement from that.
+These are available in `/Users/ndbroadbent/code/cyrus/reference/` for porting:
 
-**When something is slow or unclear:**
-If a computation is slow or you don't understand how to optimize it:
-1. **DO NOT** suggest using CYTools or external code
-2. **DO NOT** suggest skipping the test
-3. **DO** request technical documentation explaining the algorithm
-4. **DO** profile and implement optimizations in Rust
+| Directory | Source | What to Port |
+|-----------|--------|--------------|
+| `cytools/` | CYTools Python | Primary port target - polytopes, triangulations, CalabiYau |
+| `rsparse/` | Rust sparse matrices | Already a Rust crate - use directly |
+| `sprs/` | Rust sparse matrices | Already a Rust crate - use directly |
+| `SuiteSparse/` | C sparse solvers | Cholesky, LU decomposition algorithms |
+| `scipy/` | Python scientific | Linear algebra, optimization algorithms |
+| `scikit-sparse/` | Python sparse | Sparse Cholesky (wraps SuiteSparse) |
+| `topcom/` | C++ triangulations | Regular triangulation algorithms |
 
-Example of what to say:
+### External Libraries to Read (not in reference/)
+
+When porting cone.py, read these libraries for algorithm implementations:
+
+| Library | Language | What It Has | Where to Find |
+|---------|----------|-------------|---------------|
+| **PPL** | C++ | Polyhedral computations, Double Description Method | https://github.com/BUGSENG/PPL |
+| **cddlib** | C | Vertex/facet enumeration | https://github.com/cddlib/cddlib |
+| **lrs** | C | Vertex enumeration | http://cgm.cs.mcgill.ca/~avis/C/lrs.html |
+| **Normaliz** | C++ | Hilbert basis, cone computations | https://github.com/Normaliz/Normaliz |
+| **OR-Tools** | C++/Python | LP/MIP solvers, constraint programming | Already used by CYTools |
+| **qpsolvers** | Python | Quadratic programming | Already used by CYTools |
+
+### Example: Porting the Double Description Method
+
+CYTools cone.py uses PPL for the `dualize()` function (lines 2059-2107). To port this:
+
+1. Read PPL source to understand the Double Description Method
+2. Or read the simpler cddlib implementation
+3. Or find an academic paper with pseudocode
+4. Port the core algorithm to Rust (~100-200 lines)
+5. Test against CYTools output
+
+**Don't search for Rust bindings. Just port the algorithm.**
+
+### What CYTools Dependencies We Must Port
+
+| CYTools Import | What It Does | Our Approach |
+|----------------|--------------|--------------|
+| `ppl` | Polyhedral cones, DDM | Port DDM algorithm from PPL/cddlib |
+| `ortools` | LP/MIP solving | Use `good_lp` crate or port HiGHS |
+| `qpsolvers` | Quadratic programming | Port OSQP or use existing crate |
+| `flint` | Arbitrary precision | Already using `malachite` |
+| `scipy.optimize` | linprog, nnls | Port HiGHS LP, port NNLS |
+| `scipy.sparse` | Sparse matrices | Already using `rsparse`/`sprs` |
+| `numpy` | Arrays, linalg | Using `ndarray`, `faer` |
+| `qhull` | Convex hull | Use `qhull` crate (exists) |
+| `normaliz` | Hilbert basis | Port from Normaliz C++ |
+
+## CYTools Reference (GPL-3.0)
+
+**Cyrus is GPL-3.0 licensed. Read CYTools source directly and port it faithfully.**
+
+### CYTools Source Location
 ```
-"The intersection computation is taking too long. I need technical documentation
-for clean room implementation of optimized intersection number algorithms -
-specifically what algorithmic optimizations CYTools uses (sparse matrices,
-parallelization, caching, etc.)"
+/Users/ndbroadbent/code/cyrus/reference/cytools/
 ```
 
-The other agent will read CYTools, understand its optimizations, and provide you
-with a specification you can implement in Rust.
+This is the authoritative source. Key files in `src/cytools/`:
+- `polytope.py` - Polytope class (convex hull, dual, points, faces) - 144KB
+- `triangulation.py` - Triangulation class (regular triangulations, FRST) - 108KB
+- `calabiyau.py` - CalabiYau class (intersection numbers, Kähler cone, volumes) - 101KB
+- `cone.py` - Cone class (Kähler/Mori cones, tip finding) - 85KB
+- `toricvariety.py` - ToricVariety class (divisors, curves, GLSM) - 80KB
+- `utils.py` - Utility functions (linear algebra, solving, GCD) - 53KB
+- `polytopeface.py` - PolytopeFace class - 20KB
+- `config.py` - Configuration management - 5KB
+- `helpers/` - Helper modules
 
-## CRITICAL: We Reimplement EVERYTHING in Rust
+### Porting Process
 
-**Cyrus is a complete reimplementation of CYTools in Rust. We do NOT use CYTools or any external C++ code.**
+For each CYTools class/function:
 
-When a computation is slow:
-1. **Profile it** - find the bottleneck
-2. **Request technical documentation** - ask how CYTools optimizes it (see Clean Room Policy above)
-3. **Implement the optimization in Rust** - from the specification provided
-4. **NEVER suggest "just use CYTools"** - that defeats the entire purpose
+1. **Read the Python thoroughly** - understand every line, every edge case
+2. **Create the Rust module** - match the structure where sensible
+3. **Write unit tests FIRST** - generate test cases by running CYTools Python
+4. **Port the implementation** - match behavior exactly
+5. **Compare outputs** - run both Python and Rust, verify identical results
+6. **Optimize later** - only after tests pass, use rayon/SIMD if needed
 
-When a test takes a long time:
-1. **Run it anyway** - correctness over speed
-2. **Profile and optimize** - make it faster
-3. **Request documentation** - if you need to understand the algorithm better
-4. **NEVER suggest "skip this test"** - we need to know it works
+### Testing Strategy
 
-The Python code in `string_theory/` calls `cy.intersection_numbers()` - that's CYTools doing the work.
-Our Rust code must compute intersection numbers from first principles, and it must be fast enough for production.
+**Every ported function MUST have unit tests that compare against CYTools output.**
 
-**Bad (what you should NEVER suggest):**
+```rust
+#[test]
+fn test_intersection_numbers_matches_cytools() {
+    // Load fixture generated by running CYTools Python
+    let expected = load_fixture("intersection_numbers_4_214.json");
+
+    // Run our Rust implementation
+    let actual = cy.intersection_numbers(in_basis=true);
+
+    // Exact match required
+    assert_eq!(actual, expected);
+}
 ```
-"CYTools has optimized C++ code for this"
-"We could skip this slow test"
-"Use McAllister's precomputed values"
-"Run in release mode or skip for now"
+
+Generate test fixtures by running CYTools Python and saving outputs to JSON/msgpack files.
+
+## CRITICAL: Extract What We Need, Test It Thoroughly
+
+**We're not building a general-purpose library. Extract the specific algorithms needed for our pipeline.**
+
+This is a focused CY/quintessence project. We lift out exactly the algorithms we need from CYTools, PPL, SciPy, etc., and write comprehensive unit tests for each.
+
+### What This Means
+
+1. **Extract specific algorithms** - not entire classes if we don't need everything
+2. **Comprehensive unit tests** - every extracted function gets thorough testing
+3. **Understand the algorithm** - read the source, understand it, port it correctly
+4. **Visualize everything** - if we can't see it, we don't understand it
+
+**Bad (what you should NEVER do):**
+```
+"Use McAllister's precomputed values instead of computing"
+"Skip the test because it's too slow"
+"This is close enough"
+"I don't understand why this works but it passes"
 ```
 
 **Good (what you SHOULD do):**
 ```
-"The intersection computation is O(n³). Let me profile it."
-"I need technical documentation for clean room implementation of intersection optimizations"
-"I'll parallelize this with rayon once I understand the algorithm."
-"Let me check if we can use sparse matrices here."
+"We need intersection numbers - let me extract that algorithm from CYTools"
+"I'll port just the DDM algorithm from PPL for cone dualization"
+"Let me add visualization so we can see what this polytope looks like"
+"The CYTools source shows exactly how this works - porting it now"
 ```
 
 ## CRITICAL: This is Theoretical Physics, Not Normal Software
@@ -245,46 +438,50 @@ DO NOT mask problems or take shortcuts. DO NOT use fallbacks or cheat to get tes
 
 Every discrepancy must be understood completely. Every formula must be verified from first principles. If something doesn't match, STOP and figure out why - don't paper over it.
 
-### No "Simpler Approaches"
+### No "Simpler Approaches" - Just Port CYTools
 
-**There is no such thing as a "simpler approach". There is only the RIGHT approach.**
+**When in doubt, read the CYTools source. It has the answer.**
 
-In this project, a "simpler approach" has NEVER been correct. The right approach is usually very complicated because the physics is complicated. When you find yourself thinking:
+We previously wasted enormous time trying to implement from specifications or "simpler approaches." This never worked. The CYTools source code captures subtle algorithmic details that no spec document can convey.
+
+When you find yourself thinking:
 
 - "We could just hardcode this for now..."
 - "A simpler approach would be to..."
 - "We could manually identify which indices..."
 - "For now, let's just..."
 
-STOP. You are about to create technical debt that will cost days or weeks to fix later.
+STOP. Go read the CYTools source instead.
 
-**The pattern:**
-1. You suggest a "simpler approach"
-2. It works for the immediate test case
+**The pattern that wasted our time:**
+1. Try to implement from a spec or "understanding"
+2. It works for simple test cases
 3. Later, it breaks in subtle ways
-4. Debugging takes 10x longer than doing it right the first time
+4. Debugging takes days because the spec was incomplete
+5. Eventually realize CYTools source had the answer all along
 
 **The correct response:**
-1. Identify what CYTools (or the physics) actually does
-2. Request clean room documentation if needed
-3. Implement the full, correct algorithm
-4. Optimize for performance AFTER correctness is verified
+1. Read the CYTools Python source for the function
+2. Understand what it actually does (not what you think it should do)
+3. Port it faithfully to Rust
+4. Test against CYTools output
+5. Optimize AFTER correctness is verified
 
-**Examples of wrong "simpler" thinking:**
+**Examples of wrong thinking:**
 ```
-❌ "For the dual with only 4 basis vectors, we could manually identify..."
-❌ "We could skip the divisor basis computation and just use point indices..."
-❌ "A simpler approach would be to project after computing..."
+❌ "Let me implement intersection numbers from the paper's description..."
+❌ "I'll write my own triangulation algorithm based on the math..."
+❌ "The spec says to use SNF, so I'll implement that..."
 ```
 
 **Examples of correct thinking:**
 ```
-✓ "I need technical documentation for clean room implementation of divisor basis computation"
-✓ "CYTools computes intersection_numbers(in_basis=True) - we need the same capability"
-✓ "The h11-dimensional basis is fundamental to the physics, not an optimization"
+✓ "Let me read cytools/calabiyau.py to see exactly how intersection_numbers() works"
+✓ "CYTools has a Triangulation class - let me port that directly"
+✓ "The CYTools source uses this specific algorithm - I'll match it exactly"
 ```
 
-The "complicated" approach is complicated because the mathematics requires it. Simplifying means getting wrong answers.
+CYTools is battle-tested on thousands of polytopes. Our job is to port it faithfully, not reinvent it.
 
 ### No Silent Fallbacks
 
@@ -309,21 +506,27 @@ Silent fallbacks make debugging nearly impossible and produce garbage results.
 
 **ALWAYS read `string_theory/FORMULAS.md` before beginning any physics-related task.** It contains the complete formula reference with warnings about common pitfalls (e.g., classical vs instanton-corrected volumes).
 
-## Project Goal
+## End Goal: Complete String Theory Research Pipeline
 
-**Build a complete string theory research pipeline from first principles.**
+**Build a complete string theory research pipeline by porting CYTools to Rust.**
 
-This is NOT about loading precomputed values and validating they match. This is about computing EVERYTHING from the raw polytope data, exactly as we will need to when running the full GA search across the string landscape.
+CYTools already does everything we need - our job is to port it to Rust for performance and then build the GA/cosmology layers on top.
 
 ### The Production Pipeline
 
 When we run the GA on the string landscape, we will:
 1. Enumerate polytopes from Kreuzer-Skarke database
-2. Walk secondary fans (all triangulations)
+2. Walk secondary fans (all triangulations) - **CYTools `Triangulation` class**
 3. Try random flux vectors (K, M)
 4. Try random Kähler moduli
+5. Compute intersection numbers - **CYTools `CalabiYau.intersection_numbers()`**
+6. Compute volumes, Kähler cones - **CYTools `CalabiYau` methods**
 
-We CANNOT precompute intersection numbers for all polytopes × triangulations × bases. We MUST compute everything on-the-fly from first principles.
+We CANNOT precompute intersection numbers for all polytopes × triangulations × bases. Cyrus must compute everything on-the-fly, matching CYTools output exactly.
+
+### Validation Target: McAllister Paper
+
+Our end-to-end test verifies the complete pipeline against McAllister's published results (arXiv:2107.09064). When Cyrus produces identical results to CYTools for this case, we have confidence the port is correct.
 
 ## Type Safety Philosophy
 
@@ -742,9 +945,28 @@ V₀ = -3 × e^K₀ × (g_s⁷ / (4×V_string)²) × W₀²
 ```
 
 ## Key Files
-- `crates/cyrus-core/src/lib.rs`: Entry point for core logic.
-- `crates/cyrus-core/src/intersection.rs`: Intersection tensor logic (verification target).
-- `crates/cyrus-core/src/divisor.rs`: Divisor volume logic (verification target).
+
+### CYTools Reference (to port from)
+- `reference/cytools/src/cytools/polytope.py` - Polytope class (144KB)
+- `reference/cytools/src/cytools/triangulation.py` - Triangulation class (108KB)
+- `reference/cytools/src/cytools/calabiyau.py` - CalabiYau class (101KB)
+- `reference/cytools/src/cytools/cone.py` - Cone class (85KB)
+- `reference/cytools/src/cytools/toricvariety.py` - ToricVariety class (80KB)
+- `reference/cytools/src/cytools/utils.py` - Utility functions (53KB)
+- `reference/cytools/src/cytools/polytopeface.py` - PolytopeFace class (20KB)
+- `reference/cytools/src/cytools/config.py` - Configuration (5KB)
+- `reference/cytools/src/cytools/helpers/` - Helper modules
+- `reference/cytools/tests/` - CYTools tests (port these too!)
+
+### Cyrus Implementation (what we're building)
+- `crates/cyrus-core/src/lib.rs` - Entry point for core logic
+- `crates/cyrus-core/src/polytope/` - Ported Polytope class
+- `crates/cyrus-core/src/triangulation/` - Ported Triangulation class
+- `crates/cyrus-core/src/calabiyau/` - Ported CalabiYau class
+- `crates/cyrus-core/src/intersection/` - Intersection number computation
+
+### E2E Validation Tests
+- `crates/cyrus-core/tests/mcallister_e2e/` - End-to-end tests against McAllister paper
 
 ## Project Management
 - **Docs**: `project/project_docs/` (symlinked)
