@@ -39,3 +39,31 @@ So: can we find vacua (really, *trajectories toward* vacua) matching the new fin
 ---
 
 Sources: [Berkeley Lab / DESI DR2](https://newscenter.lbl.gov/2025/03/19/new-desi-results-strengthen-hints-that-dark-energy-may-evolve/), [Big Think on the ambiguity](https://bigthink.com/starts-with-a-bang/dark-energy-weakening-desi-results/), [Phys.org Feb 2026 debate](https://phys.org/news/2026-02-dark-energy-evolving.html), [ScienceDaily big-crunch coverage](https://www.sciencedaily.com/releases/2026/02/260215225537.htm), [quintessential interpretation of DESI](https://arxiv.org/pdf/2404.05722), [interpreting DESI's evidence](https://arxiv.org/pdf/2404.08056), [SIDM theory](https://nasaspacenews.com/2026/05/a-new-theory-of-dark-matter/), [Webb dark matter maps](https://www.nasa.gov/missions/webb/nasa-reveals-new-details-about-dark-matters-influence-on-universe/), [two-component dark matter](https://www.sciencedaily.com/releases/2026/04/260409101101.htm).
+
+---
+
+## Status postscript (2026-06-11)
+
+The construction project sketched above is now built, in
+`~/code/cyrus/crates/cyrus-ga`:
+
+- The cosmology layer exists and is wired into the GA fitness: each
+  candidate's energy scale is dressed as a thawing-axion potential,
+  integrated through the real Friedmann + Klein-Gordon equations, and the
+  resulting w(z) is CPL-fitted against DESI (w0 = -0.45 +/- 0.21,
+  wa = -1.8 +/- 0.6).
+- The GA searches pools of Kreuzer-Skarke polytopes (bandit scheduler,
+  exact-isotropic PFV sampling, per-geometry tadpole bounds), fully
+  stop/resumable. First 30-minute laptop run: 1.04M evaluations,
+  114 valid vacua, best at log10|V0| = -120.6 (observed: -121.5) with
+  CPL wa = -1.7 already inside the DESI band; w0 still too fast by
+  roughly the one missing log of height.
+- An automated orientifold layer (involutions, O7s, rigidity, c_i,
+  tadpoles) reproduces all five published McAllister examples and feeds a
+  verification emitter for any candidate. Remaining gates to full
+  first-principles verification: chamber selection (flop-walk the
+  secondary fan to a GV-covered phase) and Pfaffian purity (port the
+  1712.04946 fourfold Hodge formulas).
+
+Falsifiability status: on track. A verified candidate would predict a
+specific w(z) testable against DESI DR3/Euclid.

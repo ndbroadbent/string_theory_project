@@ -1,3 +1,17 @@
+> **STATUS UPDATE 2026-06-11: superseded by the Cyrus Rust pipeline.**
+> All five published examples (4-214-647, 5-81-3213, 5-113-4627 main+alt,
+> 7-51-13590) now reproduce end-to-end from first principles in
+> `~/code/cyrus` (g_s/c_tau to ~1e-6, corrected V_string at each
+> checkpoint's own precision). The Python scripts below remain useful as
+> CYTools cross-checks and fixture generators. Beyond reproduction, cyrus
+> now has: a 130-polytope landscape smoke test (exact CYTools agreement,
+> h11 = 2..150), a resumable GA with DESI quintessence fitness
+> (crates/cyrus-ga; best scan candidate log10|V0| = -120.6), and an
+> automated orientifold layer validated against all five examples
+> (cyrus_core::orientifold). Open gates to full vacuum verification:
+> chamber search (flop-walking) and purity (1712.04946 Hodge formulas).
+> See cyrus/README.md and cyrus/docs/GA_PIPELINE.md for current roadmap.
+
 # McAllister Pipeline Status - 2024-12-14
 
 ## Overview
