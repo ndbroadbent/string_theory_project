@@ -89,6 +89,15 @@ We extract specific algorithms from these files - we don't port them wholesale:
 5. **Add visualization**: Every major result should be visualizable
 6. **High code quality**: All code must pass `cargo clippy` with pedantic warnings
 
+### No Backward Compatibility
+
+**This project does NOT preserve legacy interfaces or behavior.**
+
+- Break APIs freely to match first-principles correctness
+- Remove legacy code instead of shimming it
+- Update all call sites and tests immediately
+- Prefer a clean, consistent codebase over compatibility
+
 ### Dual Test Suites (CYTools ↔ Rust)
 
 **Now that we're GPL-3.0, we can run identical inputs through both CYTools and our Rust code.**
@@ -279,6 +288,15 @@ All papers are at `/Users/ndbroadbent/code/string_theory_project/research/papers
 - Use `debug_assert!` to catch bugs in the type system during development
 - Trust the compiler and LLVM to optimize safe code
 - If profiling shows a hot path, optimize with safe abstractions first
+
+## No Backward Compatibility
+
+**This is not a legacy-maintenance project.**
+
+- **Break compatibility freely** to achieve first-principles correctness.
+- **Delete legacy fixtures, overrides, and shortcuts** as soon as real implementations exist.
+- **Update or rewrite tests** to reflect the new first-principles pipeline, even if it invalidates old snapshots.
+- **Never preserve a workaround** just to keep old tests or data files passing.
 
 ## Algorithm Sourcing Philosophy
 
